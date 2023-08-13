@@ -1,0 +1,18 @@
+.homePanel{
+    margin-top: 25px;
+    text-align: center;
+}
+
+.pagePanel{
+    margin-top: 5px;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+@media only screen and (max-width: 576px){
+    .homePanel img,
+    .pagePanel img{
+        height: 200px;
+        width: auto;
+    }
+}

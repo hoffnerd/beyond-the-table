@@ -1,0 +1,59 @@
+.uploadFormGrid{
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.uploadFormGrid .uploadFormCol {
+    margin-top: 3rem;
+    grid-column: span 2 / span 2;
+}
+
+.uploadFormGrid .selectCol {
+    border-left-width: 10px;
+    border-color: #480000;
+}
+
+.uploadFormGrid .selectCol .selectText {
+    margin-top: 3rem;
+    text-align: center !important;
+}
+
+.uploadFormGrid .selectCol .images {
+    height: 80vh;
+    overflow: auto;
+}
+
+.uploadFormGrid .selectCol .images .grid {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.uploadFormGrid .selectCol .images .grid .imageContainer {
+    display: flex;
+    justify-content: center;
+}
+
+
+@media only screen and (max-width: 845px){
+    .uploadFormGrid .uploadFormCol.sidebarOpen {
+        grid-column: span 3 / span 3;
+    }
+    
+    .uploadFormGrid .selectCol.sidebarOpen {
+        grid-column: span 3 / span 3;
+        border-left-width: 0px;
+    }
+}
+
+@media only screen and (max-width: 550px){
+    .uploadFormGrid .uploadFormCol.sidebarClosed {
+        grid-column: span 3 / span 3;
+    }
+    
+    .uploadFormGrid .selectCol.sidebarClosed {
+        grid-column: span 3 / span 3;
+        border-left-width: 0px;
+    }
+}

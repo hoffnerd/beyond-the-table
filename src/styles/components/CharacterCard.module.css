@@ -1,0 +1,281 @@
+/*______________________________________________________________________________________
+    ===== Styles above the section =====
+*/
+.characterCardsSectionOutsidePadding{
+    padding-left: 3.5rem;
+    padding-right: 3.5rem;
+}
+
+@media only screen and (max-width: 479px){
+    .characterCardsSectionOutsidePadding{
+        padding-left: unset;
+        padding-right: unset;
+    }
+}
+
+@media only screen and (max-width: 367x){
+    /* 
+        Min size of the card naturally 
+        - 367 with scroll bar showing
+        - 356 or 358 without scroll bar
+    */
+}
+
+
+
+/*______________________________________________________________________________________
+    ===== Styles for the section =====
+*/
+.characterCardsSection{
+    display: grid;
+}
+
+.characterCardsSection.columnsLarge1{
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.characterCardsSection.columnsLarge4{
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+@media only screen and (max-width: 1825px){
+    .characterCardsSection.columnsLarge4.sidebarOpen{
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media only screen and (max-width: 1615px){
+    .characterCardsSection.columnsLarge4.sidebarClosed{
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media only screen and (max-width: 1550px){
+    .characterCardsSection.columnsLarge4{
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media only screen and (max-width: 1475px){
+    .characterCardsSection.columnsLarge4.sidebarOpen{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media only screen and (max-width: 1265px){
+    .characterCardsSection.columnsLarge4.sidebarClosed{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media only screen and (max-width: 1179px){ /* 1200px */
+    .characterCardsSection.columnsLarge4{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media only screen and (max-width: 1115px){
+    .characterCardsSection.columnsLarge4.sidebarOpen{
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+}
+
+@media only screen and (max-width: 900px){
+    .characterCardsSection.columnsLarge4.sidebarClosed{
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+}
+
+@media only screen and (max-width: 819px){ /* 825px */
+    .characterCardsSection.columnsLarge4{
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+}
+
+
+/*______________________________________________________________________________________
+    ===== Styles for the card =====
+*/
+.characterCard{
+    --mainPlateColor: rgb(168 162 158);
+    --mainBackgroundColor: rgb(68 64 60);
+
+    overflow: hidden;
+    width: 350px;
+    height: 500px;
+    margin: auto;
+    background-color: var(--mainBackgroundColor);
+    border-color: rgb(250 204 21);
+    border-width: 8px;
+    border-radius: 0.5rem;
+}
+
+.characterCard .titlePlate{
+    /* font-weight: bold; */
+    /* -webkit-text-stroke: 1px black; */
+    margin-bottom: -5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.25rem;
+}
+
+.characterCard .titlePlate .levelPlate{
+    background-color: var(--mainPlateColor);
+    border-radius: 9999px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 0.7rem;
+    font-weight: 400;
+    color: black;
+    font-style: italic;
+    height: 16px;
+    margin-left: -5px;
+    margin-top: 2px;
+    background-image: url(/images/classBackground/basic.png);
+}
+.characterCard .titlePlate .name,
+.characterCard .titlePlate .hp{
+    font-weight: bold;
+    text-shadow: #000000 1px 0px 0px, #000000 0px 1px 0px, #000000 0px -1px 0px, #000000 -1px 0px 0px;
+}
+
+.characterCard .titlePlate .armor{
+    position: absolute;
+    left: 14px; /* 12px */
+    top: 8px;
+    color: black;
+    font-weight: bold;
+    /* background-image: url(/shield.svg);
+    width: 100px;
+    height: 100px; */
+}
+
+.characterCard .titlePlate .classIcon{
+    overflow: hidden;
+    width: 25px;
+    height: 25px;
+    border-width: 1px;
+    border-radius: 9999px;
+    border-color:  var(--mainBackgroundColor);
+}
+
+.characterCard .mainPlate {
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 4px;
+    margin-bottom: -10px;
+}
+
+.characterCard .mainPlate .characterImage{
+    overflow: hidden;
+    width: 302px;
+    height: 302px;
+    background-color: var(--mainPlateColor);
+    border-color: var(--mainPlateColor);
+    border-width: 4px;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    text-shadow: #000000 1px 0px 0px, #000000 0px 1px 0px, #000000 0px -1px 0px, #000000 -1px 0px 0px;
+}
+
+.characterCard .mainPlate .infoPanel{
+    font-size: 0.75rem;
+    margin-bottom: 16px;
+    background-color: var(--mainPlateColor);
+    border-color: var(--mainPlateColor);
+    border-width: 4px;
+    border-bottom-right-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+}
+
+.characterCard .mainPlate .infoPanel .info{
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-top: -8px;
+    font-size: 0.7rem;
+}
+
+.characterCard .basePlate{
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+.characterCard .abilitiesPlate{
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-bottom: 4px;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.5rem;
+}
+
+.characterCard  .abilitiesPlate .abilityPanel {
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-shadow: #000000 1px 0px 0px, #000000 0px 1px 0px, #000000 0px -1px 0px, #000000 -1px 0px 0px;
+    /* -webkit-text-stroke: 1px black; */
+}
+
+.characterCard  .abilitiesPlate .abilityPanel .modifier{
+    border-width: 2px;
+    border-radius: 0.5rem;
+    border-color: var(--mainPlateColor);
+    font-size: 1.5rem;
+    background-color: rgba(0,0,0,0.2);
+}
+
+.characterCard  .abilitiesPlate .abilityPanel .score{
+    border-width: 2px;
+    border-radius: 9999px;
+    background-color:  var(--mainBackgroundColor);
+    border-color: var(--mainPlateColor);
+}
+
+.characterCard .textPlate{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 30px;
+}
+
+.characterCard .textPlate .text{
+    font-style: italic;
+    font-size: 0.6rem;
+    color: black;
+    text-align: center;
+}
+
+
+.characterCard input,
+.characterCard select{
+    background-color: unset;
+    border-color: unset;
+    color: white;
+}
+
+.characterCard input.correctPadding{
+    padding: 0px 0px 0px 5px;
+}
+
+.characterCard input.nameInput{
+    width: 145px;
+}
+
+.characterCard input.hpInput{
+    width: 45px;
+}
+
+.characterCard input.levelInput{
+    width: 40px;
+    font-size: 0.6rem;
+}
+
+.characterCard .armorInputContainter{
+    left: 5px !important;
+    right: 5px !important;
+}
+.characterCard input.armorInput{
+    font-size: 0.9rem;
+}

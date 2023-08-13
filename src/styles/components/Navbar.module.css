@@ -1,0 +1,32 @@
+
+.linkText:hover .future_subtext,
+.linkText:hover .coming_subtext,
+.linkText:focus .future_subtext,
+.linkText:focus .coming_subtext{
+    font-size: 0.75rem;
+    animation: futureAnim 2s ease 500ms infinite normal forwards;
+}
+
+.future,
+.coming{
+    text-decoration: line-through;
+}
+
+.future_subtext,
+.coming_subtext{
+    font-size: 0rem;
+    transition: 500ms linear;
+}
+
+@keyframes futureAnim {
+	0%,
+	50%,
+	100% {
+		opacity: 1;
+	}
+
+	25%,
+	75% {
+		opacity: 0;
+	}
+}
