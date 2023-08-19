@@ -88,7 +88,7 @@ const useMasterInputs = (readyToRender, dataStructure, dataToFillInputState = nu
         if(readyToRender && initialized){
             return renderInputs();
         }
-        return <Loading />
+        return <Loading center={true} />
     }
 
     //______________________________________________________________________________________

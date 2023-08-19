@@ -5,7 +5,7 @@ import styles from "@/styles/components/Loading.module.css";
  * Displays a loading animation
  * @prop {string} style String indicating which loading animation to show
  */
-const Loading = ({style="bars", color=null}) => {
+const Loading = ({style="bars", color=null, center=false, centerScreen=false}) => {
 
     const renderLoader = (style) => {
         if (style === "bars") {
@@ -34,9 +34,11 @@ const Loading = ({style="bars", color=null}) => {
     };
 
     return (
-        <div className="tw-flex tw-flex-row">
-            {renderLoader(style)}
-            <p>Loading...</p>
+        <div className={`${center ? "tw-flex tw-justify-center tw-items-center tw-text-2xl" : ""} ${centerScreen ? "tw-h-screen" : ""}`}>
+            <div className="tw-flex tw-flex-row">
+                {renderLoader(style)}
+                <p>Loading...</p>
+            </div>
         </div>
     );
 };

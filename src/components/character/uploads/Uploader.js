@@ -5,7 +5,7 @@ import { useAppContext } from "@/context/AppContext";
 // Upload Thing ---------------------------------------------------------------------
 import { UploadDropzone } from "@/util/uploadthing"
 // Other ----------------------------------------------------------------------------
-import { fireSwal, isArray, isObj } from "@/util";
+import { callAPI, fireSwal, isArray, isObj } from "@/util";
 
 
 
@@ -24,16 +24,22 @@ const Uploader = ({ referer }) => {
     
     //______________________________________________________________________________________
     // ===== Handler Functions =====
+    const createUploads = async (files) => {
+        const { done, message } = await callAPI({ url: "uploads", method: "POST" }, { files });
+        console.log({ done, message })
 
-    const onClientUploadComplete = (files) => {
-        // console.log("Files: ", files);
-        if(!(isArray(files) && isObj(files[0], [ "key" ]))) return;
+        if (!done) return; 
 
         fireSwal({ icon: "success", text: "Successfully uploaded Image!" });
-
         setSelectedImage(files[0].key);
-        // console.log(Date.now())
         setRevalidateUserUploads(true);
+    }
+
+    const onClientUploadComplete = (files) => {
+        console.log("Files: ", files);
+        if(!(isArray(files) && isObj(files[0], [ "key" ]))) return;
+
+        createUploads(files);
     }
 
     const onUploadError = (error) => {

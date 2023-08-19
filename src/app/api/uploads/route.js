@@ -1,7 +1,7 @@
 
 import { NextResponse } from "next/server";
 import { apiProtector } from "@/lib/protector";
-import { readUploadsByUser } from "@/lib/upload";
+import { createUploads, readUploadsByUser } from "@/lib/upload";
 
 
 
@@ -19,5 +19,20 @@ export async function GET(request) {
     if( !authorized ) return NextResponse.json({done: false, authorized, message: message ? message : "Unauthorized!" });
 
     const uploads = await readUploadsByUser(session.user.email);
+    return NextResponse.json({done: true, uploads});
+}
+
+
+
+
+export async function POST(request) {
+
+    // deconstruct request body/payload
+    const { files } = await request.json();
+
+    const { authorized, message, session} = await apiProtector({ requiredRole: "USER" });
+    if( !authorized ) return NextResponse.json({done: false, authorized, message: message ? message : "Unauthorized!" });
+
+    const uploads = await createUploads(session.user.email, files);
     return NextResponse.json({done: true, uploads});
 }

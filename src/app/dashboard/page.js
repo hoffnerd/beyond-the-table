@@ -25,10 +25,6 @@ const config = {
 }
 
 //______________________________________________________________________________________
-// ===== Page Revalidation =====
-export const revalidate = 60;
-
-//______________________________________________________________________________________
 // ===== Page Meta Data =====
 export const metadata = {
     title: `${config.title} | Beyond the Table`,
@@ -47,10 +43,6 @@ const Page = async () => {
     const session = await pageProtector(config);
 
     //______________________________________________________________________________________
-    // ===== Data from Server =====
-    const characters = session && session.user && session.user.email ? await readCharacters({ userEmail: session.user.email }) : null;
-
-    //______________________________________________________________________________________
     // ===== Component Return =====
     return (
         <PageWrapper className="tw-my-12" title={config.title}>
@@ -66,15 +58,13 @@ const Page = async () => {
             </div>
             <br />
             <div className={styles.characterCardsSectionOutsidePadding}>
-                {isArray(characters) ?
-                    <CharacterCards characters={characters} addLinkToCharacterPage={true} pageHasSideBar={true}/>
-                    :
+                <CharacterCards apiPath={"auth/characters"} pageHasSideBar={true} childrenType={"noCharacters"}>
                     <div className="container">
                         <div className="alert alert-warning tw-text-center">
                             <strong>Oops!</strong> Looks like you don't have any characters. <Link href="/characters/create">Click here to make one!</Link>
                         </div>
                     </div>
-                }
+                </CharacterCards>
             </div>
         </PageWrapper>
     )

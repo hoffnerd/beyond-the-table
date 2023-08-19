@@ -5,11 +5,10 @@
 import styles from '@/styles/components/CharacterCard.module.css'
 // Components -----------------------------------------------------------------------
 import Loading from '@/components/layout/Loading';
-import CharacterCard from '@/components/character/cards/CharacterCard';
 import AnimatedCard from './AnimatedCard';
+import CharacterCard from '@/components/character/cards/CharacterCard';
 // Hooks ----------------------------------------------------------------------------
 import { useAppContext } from '@/context/AppContext';
-import useFetch from '@/hooks/useFetch';
 import useMasterInputs from '@/hooks/useMasterInputs';
 // Data -----------------------------------------------------------------------------
 import { amountOfCardsToLoad } from '@/data/_config';
@@ -24,7 +23,9 @@ import { filterCharacters } from '@/util/character';
 // ===== Component =====
 
 /* This is the character page of the site */
-const CharacterCards = ({ children, childrenType=false, apiPath="characters", isAnimated=true, pageHasSideBar=false}) => {
+const CharacterCards = ({apiPath="character", isAnimated=true, pageHasSideBar=false}) => {
+
+    // console.log(characters)
 
     //______________________________________________________________________________________
     // ===== State from AppContext =====
@@ -33,12 +34,12 @@ const CharacterCards = ({ children, childrenType=false, apiPath="characters", is
     //______________________________________________________________________________________
     // ===== Component state =====
     const [amountToLoad, setAmountToLoad] = useState(amountOfCardsToLoad);
+    const [characters, setCharacters] = useState("loading");
     const [filteredCharacters, setFilteredCharacters] = useState(null);
 
     //______________________________________________________________________________________
     // ===== Hooks =====
-    const [ initialized, characters ] = useFetch({ url: apiPath, cache: 'no-store' });
-    const { renderInputsSection, dynamicInputState } = useMasterInputs(initialized, characterFilters)
+    const { renderInputsSection, dynamicInputState } = useMasterInputs(characters !== "loading" && characters !== "error", characterFilters)
 
 
     //______________________________________________________________________________________
@@ -47,7 +48,28 @@ const CharacterCards = ({ children, childrenType=false, apiPath="characters", is
         if(!(isObj(dynamicInputState) && isArray(characters))) return;
         setFilteredCharacters(filterCharacters(dynamicInputState, characters));
     }, [dynamicInputState, characters])
+
+    useEffect(() => {
+        if(characters !== "loading") return;
+        readCharactersFromAPI();
+    }, [characters])
     
+
+    //______________________________________________________________________________________
+    // ===== Functions Used in Use Effects =====
+
+    const readCharactersFromAPI = async () => {
+        const { done, characters: chars } = await callAPI({ url: apiPath, method: "GET" })
+        console.table(chars);
+
+        if (!(done && isArray(chars))) {
+            setCharacters("error")
+            console.error({ done, chars })
+            return;
+        }
+        setCharacters(chars)
+    }
+
 
 
     //______________________________________________________________________________________
@@ -77,7 +99,7 @@ const CharacterCards = ({ children, childrenType=false, apiPath="characters", is
     const renderCharacters = () => {
         let displayOfCharacters = [];
 
-        if(!isArray(filteredCharacters)) return childrenType === "noCharacters" ? children : renderNoCharacters();
+        if(!isArray(filteredCharacters)) return renderNoCharacters();
 
         for(let i = 0; i < amountToLoad; i++){
             const character = filteredCharacters[i];
@@ -121,7 +143,7 @@ const CharacterCards = ({ children, childrenType=false, apiPath="characters", is
 
     //______________________________________________________________________________________
     // ===== Component Return =====
-    if(characters === "error") renderError();
+    if(characters === "error") return renderError();
     if(characters === "loading") return <Loading center={true} />;
     return (
         <Fragment>

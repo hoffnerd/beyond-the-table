@@ -220,6 +220,7 @@ export const callAPI = async (apiConfig, payload = null, isFormData = false) => 
         if(isObj(apiConfig, [ "cache" ])){
             fetchOptions.cache = apiConfig.cache;
         }
+        console.log({fetchOptions})
 
 
         if(payload && ( apiConfig.method === "POST" || apiConfig.method === "PUT" )){

@@ -1,16 +1,12 @@
 // React/Next -----------------------------------------------------------------------
-import { Fragment } from 'react';
-import { redirect } from 'next/navigation';
 // Styles ---------------------------------------------------------------------------
 // Components -----------------------------------------------------------------------
-import CharacterCard from '@/components/character/cards/CharacterCard';
 import PageWrapper from '@/components/layout/PageWrapper';
+import PageBody from './pageBody';
 // SeverFunctions -------------------------------------------------------------------
-import { readServerSession } from '@/lib/protector';
 import { readCharacterByIdFromParams } from '@/lib/character';
 // Other ----------------------------------------------------------------------------
 import { isObj } from '@/util';
-import { isCharacterVisible } from '@/util/character';
 
 
 
@@ -51,48 +47,20 @@ export async function generateMetadata({ params }){
 const Page = async ({params, searchParams }) => {
 
     //______________________________________________________________________________________
-    // ===== Session =====
-    const session = await readServerSession();
-    //______________________________________________________________________________________
-    // ===== Data from Server =====
-    const character = await readCharacterByIdFromParams(params);
-
-    //______________________________________________________________________________________
-    // ===== Render Functions =====
-    
-    const renderNoCharacter = () => {
-        return (
-            <div className='alert alert-warning'>
-                <strong>Oops! </strong> Looks like this character does not exist. If you believe this to be an error on our part, please let us know by emailing <a href='mailto:thetablebeyond@gmail.com'>thetablebeyond@gmail.com</a>
-            </div>
-        )
-    }
-
-    const renderCharacter = () => {
-        if ( !isObj(character, [ "id", "name" ]) ) return renderNoCharacter();
-
-        if( !isCharacterVisible(character, session) ) redirect("/characters");
-        
-        return(
-            <Fragment>
-                <CharacterCard character={character} />
-                <br/>
-                <div className='alert alert-info'>
-                    <strong>Coming Soon! </strong> Eventually this page will also contain skills, player written notes, and maybe even items and spells.
-                </div>
-            </Fragment>
-        )
-    }
-
-
+    // ===== Constants =====
+    const id = isObj(params, [ 'id' ]) ? params.id : null;
 
     //______________________________________________________________________________________
     // ===== Component Return =====
     return (
-        <PageWrapper className="container tw-my-12" title={isObj(character, ["name"]) ? character.name : "Character Not Found!"} showTitleSection={false}>
+        <PageWrapper className="container tw-my-12" showTitleSection={false}>
             <br/>
             <br/>
-            {renderCharacter()}
+            <PageBody id={id} />
+            <br/>
+            <div className='alert alert-info'>
+                <strong>Coming Soon! </strong> Eventually this page will also contain skills, player written notes, and maybe even items and spells.
+            </div>
         </PageWrapper>
     )
 }

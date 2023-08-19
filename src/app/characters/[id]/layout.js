@@ -5,7 +5,7 @@ import Sidebar from '@/components/character/Sidebar';
 // SeverFunctions -------------------------------------------------------------------
 import { readCharacterByIdFromParams } from '@/lib/character';
 // Other ----------------------------------------------------------------------------
-import { isObj } from '@/util';
+
 
 //______________________________________________________________________________________
 // ===== Component =====

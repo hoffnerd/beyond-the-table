@@ -4,23 +4,28 @@ import { NextResponse } from 'next/server'
 import { readCharacterById, createCharacter, updateCharacter, extractDataFromRequest, processCharacter, deleteCharacter, readCharacters } from '@/lib/character';
 // Data --------------------------------------------------------------
 // Util --------------------------------------------------------------
-import { apiProtector } from '@/lib/protector';
-import { isArray, isObj } from '@/util';
+import { apiProtector, readServerSession } from '@/lib/protector';
+import { convertObjToArry, isArray, isObj } from '@/util';
+import { isCharacterVisible } from '@/util/character';
+import { dataStructureObj_baseData } from '@/data/character';
+
+
 
 
 //______________________________________________________________________________________
 // ===== Get Method for /api/character =====
+export async function GET(request) {
 
-// export async function GET(request) {
-//     const characters = await readCharacters({ userEmail: "thetablebeyond@gmail.com" });
-//     return NextResponse.json(characters);
-// }
-// export async function GET(request) {
-//     const { searchParams } = new URL(request.url);
-//     const id = searchParams.get('id');
-//     const character = await readCharacterById(id);
-//     return NextResponse.json({done: true, character});
-// }
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+
+    const session = await readServerSession();
+    
+    const character = await readCharacterById(id);
+    
+    if(!isCharacterVisible(character, session)) return NextResponse.json([false, "Character is not visible!", null]);
+    return NextResponse.json([true, "Success!", character]);
+}
 
 
 
@@ -49,6 +54,18 @@ export async function POST(request) {
 
     //______________________________________________________________________________________
     // ===== process the character data  =====
+
+    let errorMsg = false
+    const dataStructure = convertObjToArry(dataStructureObj_baseData);
+    for(let i = 0; i < dataStructure.length; i++){
+        const dataStructureObj = dataStructure[i];
+        if(dataStructureObj.required && !(dataStructureObj.key && baseDataInputState[dataStructureObj.key])){
+            errorMsg = `Missing ${dataStructureObj.display}!`
+            break;
+        }
+    }
+    if( errorMsg ) return NextResponse.json({done: false, message: errorMsg });
+
 
     const data = await processCharacter(baseDataInputState, abilitiesInputState, quoteInputState, baseDataInputStateKeys, abilitiesInputStateKeys);
 
@@ -101,6 +118,16 @@ export async function PUT(request) {
 
     //______________________________________________________________________________________
     // ===== process the character data  =====
+    let errorMsg = false
+    const dataStructure = convertObjToArry(dataStructureObj_baseData);
+    for(let i = 0; i < dataStructure.length; i++){
+        const dataStructureObj = dataStructure[i];
+        if(dataStructureObj.required && !(dataStructureObj.key && baseDataInputState[dataStructureObj.key])){
+            errorMsg = `Missing ${dataStructureObj.display}!`
+            break;
+        }
+    }
+    if( errorMsg ) return NextResponse.json({done: false, message: errorMsg });
 
     const data = await processCharacter(baseDataInputState, abilitiesInputState, quoteInputState, baseDataInputStateKeys, abilitiesInputStateKeys);
 

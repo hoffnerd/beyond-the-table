@@ -5,12 +5,11 @@ import styles from '@/styles/components/CharacterCard.module.css'
 import PageWrapper from '@/components/layout/PageWrapper';
 import MenuCardSection from '@/components/menu/MenuCardSection';
 import CharacterCards from '@/components/character/cards/CharacterCards';
-// SeverFunctions -------------------------------------------------------------------
-import { readCharacters } from '@/lib/character';
 // Data ----------------------------------------------------------------------------
 import { character_subNavigation } from '@/data/navigation';
 // Other ----------------------------------------------------------------------------
 import { isArray } from '@/util';
+import { pageProtector, readServerSession } from '@/lib/protector';
 
 
 
@@ -19,13 +18,14 @@ import { isArray } from '@/util';
 const config = {
     title: "Characters",
     page: "characters",
+    requiredRole: "USER",
     pathSoFar:"/characters",
     emptyMenuCard: { id: 'empty', columnSizes: {lg:2, md:12} }
 }
 
-//______________________________________________________________________________________
-// ===== Page Revalidation =====
-export const revalidate = 300;
+export const dynamic = 'force-dynamic'
+export const revalidate = 300
+// export const fetchCache = 'auto'
 
 //______________________________________________________________________________________
 // ===== Page Meta Data =====
@@ -43,8 +43,8 @@ export const metadata = {
 const Page = async () => {
 
     //______________________________________________________________________________________
-    // ===== Data from Server =====
-    const characters = await readCharacters({ visibility:"PUBLIC" }); //
+    // ===== Protection =====
+    const session = await pageProtector(config);
 
     //______________________________________________________________________________________
     // ===== Component Return =====
@@ -65,7 +65,7 @@ const Page = async () => {
             </div>
             <br/>
             <div className={styles.characterCardsSectionOutsidePadding}>
-                <CharacterCards characters={characters} addLinkToCharacterPage={true} />
+                <CharacterCards addLinkToCharacterPage={true} />
             </div>
         </PageWrapper>
     )

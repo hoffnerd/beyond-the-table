@@ -38,6 +38,7 @@ const UploadedImages = () => {
     //______________________________________________________________________________________
     // ===== Use Effects =====
     useEffect(() => {
+        console.log("useEffect reading uploads")
         if(uploads === "loading" || revalidateUserUploads) readUploads();
     }, [uploads, revalidateUserUploads]);
 
@@ -51,10 +52,10 @@ const UploadedImages = () => {
         if(revalidationAttempts >= 10){ console.error("revalidationAttempts over max"); return; }
 
         const {done, uploads: ups} = await callAPI({ url: `uploads`, method: "GET" }); //, cache: "no-store"
-        // console.log({done, ups, uploads});
+        console.log({done, ups, uploads});
 
         if(!(uploads === "loading" || (Array.isArray(uploads) && Array.isArray(ups) && ups.length > uploads.length))){
-            // console.log("Assuming that there is a new upload we need to display, and hitting this means the api call was proablay ran to early due to onClientUploadComplete being ran before onUploadComplete.");
+            console.log("Assuming that there is a new upload we need to display, and hitting this means the api call was proablay ran to early due to onClientUploadComplete being ran before onUploadComplete.");
             setTimeout(() => {
                 readUploads();
             }, 2000 * revalidationAttempts);
@@ -113,7 +114,7 @@ const UploadedImages = () => {
 
     //______________________________________________________________________________________
     // ===== Component Return =====
-    if(uploads === "loading") return <Loading />
+    if(uploads === "loading") return <Loading center={true} />
     if(!isArray(uploads)) return renderNoUploads();
     return( 
         <Fragment>

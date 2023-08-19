@@ -63,7 +63,6 @@ export const dataStructureObj_baseData = {
         key: "initative",
         display: "Initative",
         type: "number",
-        required: true,
         defaultValue: 0,
         columnSizes: { sm: 6 }
     },

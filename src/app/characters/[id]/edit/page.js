@@ -9,6 +9,7 @@ import { readCharacterByIdFromParams } from '@/lib/character';
 // Other ----------------------------------------------------------------------------
 import { isObj } from '@/util';
 import { isCharactersOwner } from '@/util/character';
+import PageBody from './pageBody';
 
 
 
@@ -26,7 +27,6 @@ const config = {
         description: "Edit your character's data or information!",
     }
 }
-
 
 //______________________________________________________________________________________
 // ===== Page Meta Data =====
@@ -52,29 +52,27 @@ export async function generateMetadata({ params }){
 
 /* This is the character page of the site */
 const Page = async ({params, searchParams }) => {
-    
+
     //______________________________________________________________________________________
-    // ===== Data from Server =====
-    const character = await readCharacterByIdFromParams(params);
+    // ===== Constants =====
+    const id = isObj(params, [ 'id' ]) ? params.id : null;
 
     //______________________________________________________________________________________
     // ===== Protection =====
     const redirectDestination = {
         ...config.redirectDestination,
-        notLoggedIn: `${config.redirectDestination.notLoggedIn}%2F${character.id}%2Fedit`
+        notLoggedIn: `${config.redirectDestination.notLoggedIn}%2F${id}%2Fedit`
     };
 
     const session = await pageProtector({ ...config, redirectDestination });
+
     
-    if ( !isCharactersOwner(character, session) ) redirect("/characters");
-
-
 
     //______________________________________________________________________________________
     // ===== Component Return =====
     return (
-        <PageWrapper className="container tw-my-12" title={isObj(character, ["name"]) ? character.name : "Character Not Found!"}>
-            <ModifyForm character={character} />
+        <PageWrapper className="container tw-my-12" title={config.title}>
+            <PageBody id={id} />
         </PageWrapper>
     )
 }

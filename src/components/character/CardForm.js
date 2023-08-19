@@ -114,7 +114,7 @@ const CardForm = ({races, classes, character, baseDataInputState, setBaseDataInp
     //______________________________________________________________________________________
     // ===== Component Return =====
     if((!isObj(baseDataInputState)) || (!isObj(abilitiesInputState)) || (!isObj(quoteInputState))){
-        return <Loading />
+        return <Loading center={true} />
     }
 
     return (

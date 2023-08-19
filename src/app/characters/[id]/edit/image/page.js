@@ -10,6 +10,7 @@ import { readUploadsByUser } from "@/lib/upload";
 import { isArray, isObj } from '@/util';
 import { isCharactersOwner } from '@/util/character';
 import { redirect } from 'next/navigation';
+import PageBody from './pageBody';
 
 
 //______________________________________________________________________________________
@@ -51,26 +52,21 @@ export async function generateMetadata({ params }){
 
 /* This is the character page of the site */
 const Page = async ({params, searchParams }) => {
+
+    //______________________________________________________________________________________
+    // ===== Constants =====
+    const id = isObj(params, [ 'id' ]) ? params.id : null;
     
     //______________________________________________________________________________________
     // ===== Protection =====
     const session = await pageProtector(config);
-    
-    //______________________________________________________________________________________
-    // ===== Data from Server =====
-    const character = await readCharacterByIdFromParams(params);
-    
-    if ( !isCharactersOwner(character, session) ) redirect("/characters");
-
-    // const uploads = session && session.user && session.user.email ? await readUploadsByUser(session.user.email) : null; uploads={uploads}
-    
 
 
     //______________________________________________________________________________________
     // ===== Component Return =====
     return (
-        <PageWrapper className="container" title={isObj(character, ["name"]) ? character.name : "Character Not Found!"} subtitle={config.subtitle}>
-            <EditImageBody character={character} />
+        <PageWrapper className="container" title={config.title} subtitle={config.subtitle}>
+            <PageBody id={id} />
         </PageWrapper>
     )
 }

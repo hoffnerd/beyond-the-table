@@ -14,7 +14,7 @@ import { abilitiesPossible, dataStructureObj_baseData, dataStructureObj_quote } 
 import { raceData } from '@/data/raceData';
 import { classData } from '@/data/classData';
 // Other ----------------------------------------------------------------------------
-import { callAPI, convertObjToArry, isObj } from '@/util';
+import { callAPI, convertObjToArry, fireSwal, isObj } from '@/util';
 import { generateAbilityScores } from '@/util/character';
 
 
@@ -84,7 +84,7 @@ const ModifyForm = ({ character=null }) => {
     // ===== Functions Used Only Within useEffects =====
 
     const handleSave = async () => {
-        const { done, character: savedCharacter } = await callAPI(
+        const { done, message, character: savedCharacter } = await callAPI(
             { url: "character", method: isObj(character, ["id" ]) ? "PUT" : "POST" }, 
             { 
                 characterId: isObj(character, ["id" ]) ? character.id : null,
@@ -98,7 +98,7 @@ const ModifyForm = ({ character=null }) => {
         if(done && isObj(savedCharacter, [ 'id' ])){
             setRedirectTo(`/characters/${savedCharacter.id}/edit/image`);
         } else {
-            //TODO: add error msg
+            fireSwal({ icon: "error", text: message })
             setIsSaving(false);
         }
     }
