@@ -36,7 +36,7 @@ const Page = async () => {
         <PageWrapper className="container" title={config.title} subtitle={config.description}>
             <div id="1.0.0" className='tw-mt-4'>
                 <h3>Launch!</h3>
-                <p>August 13th, 2023 | Version 1.0.0</p>
+                <p>August 19th, 2023 | Version 1.0.0</p>
                 <div className="branded-line short tw-mb-4"></div>
                 <p>Welcome! I have been working on this project for awhile and I'm excited to actually get it live. In this first version, allows users to: </p>
                 <ul className='branded'>
