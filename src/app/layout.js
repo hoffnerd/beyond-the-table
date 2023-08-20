@@ -1,4 +1,5 @@
 // React/Next -----------------------------------------------------------------------
+import Script from 'next/script'
 // Styles ---------------------------------------------------------------------------
 import '../styles/globals.css';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -25,6 +26,16 @@ export const metadata = {
 const RootLayout = async ({ children }) => {
     return (
         <html lang="en">
+            <Script src="https://www.googletagmanager.com/gtag/js?id=G-CRCKFBYMMT" />
+            <Script id="google-analytics">
+                {`
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+        
+                    gtag('config', 'G-CRCKFBYMMT');
+                `}
+            </Script>
             <body className={inter.className}>
                 <AuthContext>
                     <AppContextProvider>
