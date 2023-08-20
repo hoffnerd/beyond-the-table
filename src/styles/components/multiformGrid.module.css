@@ -1,58 +1,58 @@
-.uploadFormGrid{
+.multiformGrid{
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1rem;
 }
 
-.uploadFormGrid .uploadFormCol {
+.multiformGrid .centerForm {
     margin-top: 3rem;
     grid-column: span 2 / span 2;
 }
 
-.uploadFormGrid .selectCol {
+.multiformGrid .rightForm {
     border-left-width: 10px;
-    border-color: #480000;
+    border-color: var(--brand);
 }
 
-.uploadFormGrid .selectCol .selectText {
+.multiformGrid .rightForm .selectText {
     margin-top: 3rem;
     text-align: center !important;
 }
 
-.uploadFormGrid .selectCol .images {
+.multiformGrid .rightForm .heightScroller {
     height: 80vh;
     overflow: auto;
 }
 
-.uploadFormGrid .selectCol .images .grid {
+.multiformGrid .rightForm .heightScroller .grid {
     display: grid;
     grid-template-columns: repeat(1, minmax(0, 1fr));
     gap: 1rem;
 }
 
-.uploadFormGrid .selectCol .images .grid .imageContainer {
+.multiformGrid .rightForm .heightScroller .grid .imageContainer {
     display: flex;
     justify-content: center;
 }
 
 
 @media only screen and (max-width: 845px){
-    .uploadFormGrid .uploadFormCol.sidebarOpen {
+    .multiformGrid .centerForm.sidebarOpen {
         grid-column: span 3 / span 3;
     }
     
-    .uploadFormGrid .selectCol.sidebarOpen {
+    .multiformGrid .rightForm.sidebarOpen {
         grid-column: span 3 / span 3;
         border-left-width: 0px;
     }
 }
 
 @media only screen and (max-width: 550px){
-    .uploadFormGrid .uploadFormCol.sidebarClosed {
+    .multiformGrid .centerForm.sidebarClosed {
         grid-column: span 3 / span 3;
     }
     
-    .uploadFormGrid .selectCol.sidebarClosed {
+    .multiformGrid .rightForm.sidebarClosed {
         grid-column: span 3 / span 3;
         border-left-width: 0px;
     }

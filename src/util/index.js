@@ -70,19 +70,19 @@ export const isObj = (obj, keysToCheckFor=null, haveAllKeys=true) => {
  * resulting array. If this parameter is provided, only the values corresponding to the specified keys will be included in the resulting array.
  * @returns array that contains the values of the properties of the object passed as an argument.
  */
-export const convertObjToArry = (obj, onlyNeededKeys=null) => {
+export const convertObjToArray = (obj, onlyNeededKeys=null) => {
     let returnArray = [];
 
     /* Checking if the argument passed to the function is an object. If it is not an object, it will log an error message to the console and return an empty array. */
     if(!isObj(obj)){
-        console.error("Whatever was passed into convertObjToArry, was not an object.", {passedIn: obj});
+        console.error("Whatever was passed into convertObjToArray, was not an object.", {passedIn: obj});
         return returnArray;
     }
 
     /* Checking if the object has any keys. If the array is empty or not an array, it logs an error message to the console and returns an empty array. */
     const objKeys = Object.keys(obj);
     if(!isArray(objKeys)){
-        console.error("Keys of object all empty or non-existant", {passedIn: obj, objKeys});
+        console.error("Keys of object all empty or non-existent", {passedIn: obj, objKeys});
         return returnArray;
     }
 

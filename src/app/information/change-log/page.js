@@ -7,6 +7,7 @@ import MenuCardSection from '@/components/menu/MenuCardSection';
 // Data -----------------------------------------------------------------------------
 import { navigation } from '@/data/navigation';
 import Link from 'next/link';
+import { Fragment } from 'react';
 // Other ----------------------------------------------------------------------------
 
 
@@ -31,9 +32,33 @@ export const metadata = {
 const Page = async () => {
 
     //______________________________________________________________________________________
+    // ===== Render Functions =====
+    const renderLineBreak = () => {
+        return(
+            <Fragment>
+                <br/>
+                <br/>
+                <hr/>
+                <br/>
+                <br/>
+            </Fragment>
+        )
+    }
+
+    //______________________________________________________________________________________
     // ===== Component Return =====
     return (
         <PageWrapper className="container" title={config.title} subtitle={config.description}>
+            <div id="1.0.1" className='tw-mt-4'>
+                <h3>Launch fixes</h3>
+                <p>August 20th, 2023 | Version 1.0.1</p>
+                <div className="branded-line short tw-mb-4"></div>
+                <p>General bug fixes to character creator and other parts of the site.</p>
+                <p>I am now planning to overhaul the character creator to be easier to use.</p>
+            </div>
+
+            {renderLineBreak()}
+
             <div id="1.0.0" className='tw-mt-4'>
                 <h3>Launch!</h3>
                 <p>August 19th, 2023 | Version 1.0.0</p>
@@ -55,6 +80,8 @@ const Page = async () => {
                 <p>Thank you!</p>
                 <p>To the Table and Beyond!</p>
             </div>
+
+            <br/>
         </PageWrapper>
     )
 }

@@ -43,9 +43,7 @@ const Page = async () => {
     // ===== Component Return =====
     return (
         <PageWrapper className="container tw-my-12" title={config.title}>
-            <div className={`${styles.characterCardsSection} ${styles.columnsLarge1}`}>
-                <ModifyForm />
-            </div>
+            <ModifyForm />
         </PageWrapper>
     )
 }

@@ -21,7 +21,7 @@ const character = [
                 "bloodhunter"
             ],
             "hitpoints": "32",
-            "initative": "1"
+            "initiative": "1"
         },
         "abilities": {
             "wisdom": {
@@ -60,7 +60,7 @@ const character = [
                 "artificer"
             ],
             "hitpoints": "34",
-            "initative": "2"
+            "initiative": "2"
         },
         "abilities": {
             "wisdom": {
@@ -99,7 +99,7 @@ const character = [
                 "wizard"
             ],
             "hitpoints": "34",
-            "initative": "2"
+            "initiative": "2"
         },
         "abilities": {
             "wisdom": {
@@ -138,7 +138,7 @@ const character = [
                 "warlock"
             ],
             "hitpoints": 43,
-            "initative": "2"
+            "initiative": "2"
         },
         "abilities": {
             "wisdom": {
@@ -177,7 +177,7 @@ const character = [
                 "sorcerer"
             ],
             "hitpoints": "31",
-            "initative": "2"
+            "initiative": "2"
         },
         "abilities": {
             "wisdom": {
@@ -216,7 +216,7 @@ const character = [
                 "rogue"
             ],
             "hitpoints": "27",
-            "initative": "3"
+            "initiative": "3"
         },
         "abilities": {
             "wisdom": {
@@ -255,7 +255,7 @@ const character = [
                 "ranger"
             ],
             "hitpoints": "39",
-            "initative": "2"
+            "initiative": "2"
         },
         "abilities": {
             "wisdom": {
@@ -294,7 +294,7 @@ const character = [
                 "paladin"
             ],
             "hitpoints": "42",
-            "initative": "1"
+            "initiative": "1"
         },
         "abilities": {
             "wisdom": {
@@ -337,7 +337,7 @@ const character = [
                 "monk"
             ],
             "hitpoints": "40",
-            "initative": "4"
+            "initiative": "4"
         },
         "abilities": {
             "wisdom": {
@@ -382,7 +382,7 @@ const character = [
                 "druid"
             ],
             "hitpoints": "45",
-            "initative": "1"
+            "initiative": "1"
         },
         "abilities": {
             "wisdom": {
@@ -425,7 +425,7 @@ const character = [
                 "cleric"
             ],
             "hitpoints": 41,
-            "initative": 0
+            "initiative": 0
         },
         "abilities": {
             "wisdom": {
@@ -469,7 +469,7 @@ const character = [
                 "bard"
             ],
             "hitpoints": "41",
-            "initative": "-2"
+            "initiative": "-2"
         },
         "abilities": {
             "wisdom": {
@@ -512,7 +512,7 @@ const character = [
                 "barbarian"
             ],
             "hitpoints": "59",
-            "initative": "2"
+            "initiative": "2"
         },
         "abilities": {
             "wisdom": {
@@ -554,7 +554,7 @@ const character = [
                 "fighter"
             ],
             "hitpoints": "48",
-            "initative": "2"
+            "initiative": "2"
         },
         "abilities": {
             "wisdom": {

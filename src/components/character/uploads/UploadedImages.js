@@ -8,7 +8,8 @@ import { useAppContext } from '@/context/AppContext';
 // Components -----------------------------------------------------------------------
 import Loading from '@/components/layout/Loading';
 // Styles ---------------------------------------------------------------------------
-import styles from '@/styles/components/ImageUpload.module.css'
+// import styles from '@/styles/components/ImageUpload.module.css'
+import styles from '@/styles/components/multiformGrid.module.css'
 // Other ----------------------------------------------------------------------------
 import { callAPI, isArray } from "@/util";
 

@@ -42,3 +42,11 @@ next-env.d.ts
 /public/images/factions
 /public/shield.svg
 /public/shield1.png
+
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+**/.history                                                     
