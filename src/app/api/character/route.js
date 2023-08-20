@@ -5,9 +5,9 @@ import { readCharacterById, createCharacter, updateCharacter, extractDataFromReq
 // Data --------------------------------------------------------------
 // Util --------------------------------------------------------------
 import { apiProtector, readServerSession } from '@/lib/protector';
-import { convertObjToArry, isArray, isObj } from '@/util';
+import { convertObjToArray, isArray, isObj } from '@/util';
 import { isCharacterVisible } from '@/util/character';
-import { dataStructureObj_baseData } from '@/data/character';
+import { characterBaseData } from '@/data/character';
 
 
 
@@ -56,7 +56,7 @@ export async function POST(request) {
     // ===== process the character data  =====
 
     let errorMsg = false
-    const dataStructure = convertObjToArry(dataStructureObj_baseData);
+    const dataStructure = convertObjToArray(characterBaseData);
     for(let i = 0; i < dataStructure.length; i++){
         const dataStructureObj = dataStructure[i];
         if(dataStructureObj.required && !(dataStructureObj.key && baseDataInputState[dataStructureObj.key])){
@@ -119,7 +119,7 @@ export async function PUT(request) {
     //______________________________________________________________________________________
     // ===== process the character data  =====
     let errorMsg = false
-    const dataStructure = convertObjToArry(dataStructureObj_baseData);
+    const dataStructure = convertObjToArray(characterBaseData);
     for(let i = 0; i < dataStructure.length; i++){
         const dataStructureObj = dataStructure[i];
         if(dataStructureObj.required && !(dataStructureObj.key && baseDataInputState[dataStructureObj.key])){

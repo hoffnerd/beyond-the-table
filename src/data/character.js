@@ -1,4 +1,8 @@
-export const dataStructureObj_baseData = {
+import { raceData } from "./raceData";
+import { classData } from './classData';
+import { convertObjToArray } from "@/util";
+
+export const characterBaseData = {
     visibility: {
         key: "visibility",
         display: "Visibility",
@@ -49,6 +53,7 @@ export const dataStructureObj_baseData = {
         key: "race",
         display: "Race",
         type: "select",
+        options: convertObjToArray(raceData),
         required: true,
         columnSizes: { sm: 6 }
     },
@@ -56,12 +61,13 @@ export const dataStructureObj_baseData = {
         key: "classes",
         display: "Class",
         type: "select",
+        options: convertObjToArray(classData),
         required: true,
         columnSizes: { sm: 6 }
     },
-    initative:{
-        key: "initative",
-        display: "Initative",
+    initiative:{
+        key: "initiative",
+        display: "Initiative",
         type: "number",
         defaultValue: 0,
         columnSizes: { sm: 6 }
@@ -76,14 +82,14 @@ export const dataStructureObj_baseData = {
     }
 }
 
-export const dataStructureObj_quote = {
+export const characterQuote = {
     key: "quote",
     display: "Quote",
     type: "textarea",
 }
 
 
-export const dataStructure_imageOffset = [
+export const characterImageOffset = [
     {
         key: "zoom",
         display: "Zoom",
@@ -149,6 +155,29 @@ export const abilitiesPossible = [
         type: "number",
         required: true,
         defaultValue: 10,
+    },
+];
+
+export const advancedTogglers = [
+    {
+        key: "multiclass",
+        display: "Multiclass",
+        description: (value) => {
+            if(value) return "Multiclassing. Toggle to single class."
+            return "Single class. Toggle to activate Multiclassing."
+        },
+        type: "toggleSlider",
+        defaultValue: false
+    },
+    {
+        key: "overrideModifiers",
+        display: "Override Modifiers",
+        description: (value) => {
+            if(value) return "Overriding Calculated Modifiers. Toggle to allow Calculated Modifiers."
+            return "Calculated Modifiers. Toggle to Overriding Calculated Modifiers."
+        },
+        type: "toggleSlider",
+        defaultValue: false
     },
 ]
 

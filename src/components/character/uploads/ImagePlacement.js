@@ -5,7 +5,8 @@ import { Fragment, useEffect, useState } from 'react';
 import { redirect } from 'next/navigation';
 import Image from 'next/image';
 // Styles ---------------------------------------------------------------------------
-import styles from '@/styles/components/ImageUpload.module.css'
+// import styles from '@/styles/components/ImageUpload.module.css'
+import styles from '@/styles/components/multiformGrid.module.css'
 // Context --------------------------------------------------------------------------
 import { useAppContext } from '@/context/AppContext';
 // Components -----------------------------------------------------------------------
@@ -13,7 +14,7 @@ import CharacterCard from '@/components/character/cards/CharacterCard';
 // Hooks ----------------------------------------------------------------------------
 import useMasterInputs from '@/hooks/useMasterInputs';
 // Data -----------------------------------------------------------------------------
-import { dataStructure_imageOffset } from '@/data/character';
+import { characterImageOffset } from '@/data/character';
 // Other ----------------------------------------------------------------------------
 import { callAPI, fireSwal, isObj } from '@/util';
 
@@ -33,7 +34,7 @@ const ImagePlacement = ({ character }) => {
 
     //______________________________________________________________________________________
     // ===== Component Hooks =====
-    const { renderInputsSection, dynamicInputState } = useMasterInputs(true, dataStructure_imageOffset, 
+    const { renderInputsSection, dynamicInputState } = useMasterInputs(true, characterImageOffset, 
         isObj(character, ["image"]) ? { 
             zoom: character.image.zoom ? character.image.zoom : "",
             x: character.image.x ? character.image.x : "",
@@ -70,7 +71,7 @@ const ImagePlacement = ({ character }) => {
     //______________________________________________________________________________________
     // ===== Component =====
     return (
-        <div className={`${styles.uploadFormCol} ${sidebarOpen ? styles.sidebarOpen : styles.sidebarClosed}`}>
+        <div className={`${styles.centerForm} ${sidebarOpen ? styles.sidebarOpen : styles.sidebarClosed}`}>
             <h3 className="text-center">Edit Character Image</h3>
             <CharacterCard character={character} imageOverride={{ filename: selectedImage, ...dynamicInputState }} />
             <br />

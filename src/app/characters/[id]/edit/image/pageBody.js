@@ -4,7 +4,8 @@
 import { Fragment, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 // Styles ---------------------------------------------------------------------------
-import styles from '@/styles/components/ImageUpload.module.css'
+// import styles from '@/styles/components/ImageUpload.module.css'
+import styles from '@/styles/components/multiformGrid.module.css'
 // Hooks ----------------------------------------------------------------------------
 import useRedirect from '@/hooks/useRedirect';
 import useFetch from '@/hooks/useFetch';
@@ -60,11 +61,11 @@ const PageBody = ({id}) => {
     if (status === "loading" || character === "loading") return <Loading center={true} />;
     if (character === "error" || !isObj(character, ["id"])) return <NoCharacter/>;
     return (
-        <div className={styles.uploadFormGrid}>
+        <div className={styles.multiformGrid}>
             <ImagePlacement character={character} />
-            <div className={`${styles.selectCol} ${sidebarOpen ? styles.sidebarOpen : styles.sidebarClosed}`}>
+            <div className={`${styles.rightForm} ${sidebarOpen ? styles.sidebarOpen : styles.sidebarClosed}`}>
                 <Uploader />
-                <div className={styles.images}>
+                <div className={styles.heightScroller}>
                     <UploadedImages />
                 </div>
             </div>

@@ -1,15 +1,11 @@
 // React/Next -----------------------------------------------------------------------
 // Components -----------------------------------------------------------------------
 import PageWrapper from '@/components/layout/PageWrapper';
-import EditImageBody from '@/components/character/uploads/EditImageBody';
 // SeverFunctions -------------------------------------------------------------------
 import { pageProtector } from '@/lib/protector';
 import { readCharacterByIdFromParams } from '@/lib/character';
-import { readUploadsByUser } from "@/lib/upload";
 // Other ----------------------------------------------------------------------------
-import { isArray, isObj } from '@/util';
-import { isCharactersOwner } from '@/util/character';
-import { redirect } from 'next/navigation';
+import { isObj } from '@/util';
 import PageBody from './pageBody';
 
 

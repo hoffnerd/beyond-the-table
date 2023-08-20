@@ -20,7 +20,7 @@ import { helpCreateDisplay } from '../../../util/inputs';
  * @prop helpSetInputState - Function, this is the same helpSetInputState declared in MasterInputComponent
  * @return Returns desired input based on the dataStructureObj
 */
-const Toggle = ({className, dataStructureObj, dynamicInputState, setDynamicInputState, displayInputHeaders=true, internalIndex=null, helpSetInputState}) => {
+const ToggleButton = ({className, dataStructureObj, dynamicInputState, setDynamicInputState, displayInputHeaders=true, internalIndex=null, helpSetInputState}) => {
 
 
     //______________________________________________________________________________________
@@ -36,4 +36,4 @@ const Toggle = ({className, dataStructureObj, dynamicInputState, setDynamicInput
         </button>
     )
 }
-export default Toggle;
+export default ToggleButton;

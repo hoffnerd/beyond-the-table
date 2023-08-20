@@ -10,9 +10,11 @@ import Standard from '../inputs/basic/Standard';
 import Select from '../inputs/basic/Select';
 import TextArea from '../inputs/basic/TextArea';
 // Data -----------------------------------------------------------------------------
-import { abilitiesPossible, dataStructureObj_baseData, dataStructureObj_quote } from '@/data/character';
+import { abilitiesPossible, characterBaseData, characterQuote } from '@/data/character';
+import { raceData } from '@/data/raceData';
+import { classData } from '@/data/classData';
 // Other ----------------------------------------------------------------------------
-import { isArray, isObj } from '@/util';
+import { convertObjToArray, isArray, isObj } from '@/util';
 import { calculateModifierNumber, calculateProficiency } from '@/util/character';
 import { helpSetInputState } from '@/util/inputs';
 import { renderImage } from '@/util/characterCard';
@@ -21,16 +23,18 @@ import { renderImage } from '@/util/characterCard';
 //______________________________________________________________________________________
 // ===== Component =====
 
-const CardForm = ({races, classes, character, baseDataInputState, setBaseDataInputState, abilitiesInputState, setAbilitiesInputState, quoteInputState, setQuoteInputState }) => {
+const CardForm = ({character, baseDataInputState, setBaseDataInputState, abilitiesInputState, setAbilitiesInputState, quoteInputState, setQuoteInputState }) => {
 
     //______________________________________________________________________________________
-    // ===== Component State =====
-    
+    // ===== Constants =====
+    const races = convertObjToArray(raceData);
+    const classes = convertObjToArray(classData);
+
+
 
     //______________________________________________________________________________________
     // ===== Render Functions =====
     
-
     const renderProficiency = (level=null, proficiency=null) => {
         const proficiencyToDisplay = proficiency ? proficiency : level ? calculateProficiency(level) : 0;
         return (
@@ -122,7 +126,7 @@ const CardForm = ({races, classes, character, baseDataInputState, setBaseDataInp
             <div className='row'>
                 <div className='col-sm-4'></div>
                 <div className='col-sm-4'>
-                    {renderSelectInput(null, null, dataStructureObj_baseData.visibility, true)}
+                    {renderSelectInput(null, null, characterBaseData.visibility, true)}
                 </div>
                 <div className='col-sm-4'></div>
             </div>
@@ -132,22 +136,22 @@ const CardForm = ({races, classes, character, baseDataInputState, setBaseDataInp
                     <div className='tw-flex'>
                         <div style={{ position: "relative" }}>
                             <div className={`${styles.levelPlate} tw-flex`}>
-                                Lvl:{renderStandardInput(`${styles.correctPadding} ${styles.levelInput}`, dataStructureObj_baseData.level)}
+                                Lvl:{renderStandardInput(`${styles.correctPadding} ${styles.levelInput}`, characterBaseData.level)}
                             </div>
                             <div style={{ position: "absolute", marginLeft: "-5px", zIndex: 9 }}>
                                 <Image alt="AC" src="/shield2.png" width={50} height={50} />
                                 <div className={`${styles.armor} ${styles.armorInputContainter}`}>
-                                    {renderStandardInput(`${styles.correctPadding} ${styles.armorInput}`, dataStructureObj_baseData.armor)}
+                                    {renderStandardInput(`${styles.correctPadding} ${styles.armorInput}`, characterBaseData.armor)}
                                 </div>
                             </div>
                         </div>
                         &nbsp;
-                        {renderStandardInput(`${styles.correctPadding} ${styles.nameInput}`, dataStructureObj_baseData.name)}
+                        {renderStandardInput(`${styles.correctPadding} ${styles.nameInput}`, characterBaseData.name)}
                     </div>
                     <div className='tw-flex'>
                         <div className={`${styles.hp} tw-flex`}>
                             <span>HP:</span>
-                            {renderStandardInput(`${styles.correctPadding} ${styles.hpInput}`, dataStructureObj_baseData.hitpoints)}
+                            {renderStandardInput(`${styles.correctPadding} ${styles.hpInput}`, characterBaseData.hitpoints)}
                         </div>
                         &nbsp;
                         <div className={styles.classIcon}>
@@ -169,16 +173,16 @@ const CardForm = ({races, classes, character, baseDataInputState, setBaseDataInp
                     <div className={styles.infoPanel}>
                         <div className={`${styles.info} tw-text-black`}>
                             <div className="flex-items-evenly">
-                                {renderSelectInput(null, {padding: "0px 0px 0px 5px"},  {...dataStructureObj_baseData.race, options:[...races]})}
-                                {renderSelectInput(null, {padding: "0px 0px 0px 5px"}, {...dataStructureObj_baseData.classes, options:[...classes]})}
+                                {renderSelectInput(null, {padding: "0px 0px 0px 5px"},  {...characterBaseData.race, options:[...races]})}
+                                {renderSelectInput(null, {padding: "0px 0px 0px 5px"}, {...characterBaseData.classes, options:[...classes]})}
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className={`${styles.basePlate} ${styles.abilitiesPlate}`}>
                     {renderProficiency(baseDataInputState.level)}
-                    {renderAltStatBlock(dataStructureObj_baseData.initative)}
-                    {renderAltStatBlock(dataStructureObj_baseData.speed, "ft")}
+                    {renderAltStatBlock(characterBaseData.initiative)}
+                    {renderAltStatBlock(characterBaseData.speed, "ft")}
                 </div>
                 <div className={styles.abilitiesPlate} >
                     {renderAbilities()}
@@ -189,7 +193,7 @@ const CardForm = ({races, classes, character, baseDataInputState, setBaseDataInp
                 <div className='col-sm-4'>
                     <br/>
                     <TextArea
-                        dataStructureObj={dataStructureObj_quote}
+                        dataStructureObj={characterQuote}
                         dynamicInputState={quoteInputState}
                         setDynamicInputState={setQuoteInputState}
                         helpSetInputState={helpSetInputState}

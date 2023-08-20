@@ -4,13 +4,13 @@ import { Fragment, useEffect, useState } from 'react';
 // Components -----------------------------------------------------------------------
 import Standard from './basic/Standard';
 import Select from './basic/Select';
+import TextArea from './basic/TextArea';
+import ToggleButton from './basic/ToggleButton';
 import GroupOfInputs from './groups/GroupOfInputs';
 import ManyGroupOfInputs from './groups/ManyGroupOfInputs';
 // Other ----------------------------------------------------------------------------
 import { isArray, isObj } from '../../util';
 import { createInputState, helpSetInputState } from '../../util/inputs';
-import TextArea from './basic/TextArea';
-import Toggle from './basic/Toggle';
 
 
 //______________________________________________________________________________________
@@ -129,9 +129,9 @@ const MasterInputComponent = ({dataStructureObj, dynamicInputState, setDynamicIn
                                 helpSetInputState={hasPassedInHelpSetInputState ? passedInHelpSetInputState : helpSetInputState}
                             />
                         )
-                    case "toggle":
+                    case "toggleButton":
                         return(
-                            <Toggle
+                            <ToggleButton
                                 dataStructureObj={dataStructureObj}
                                 dynamicInputState={dynamicInputState}
                                 setDynamicInputState={setDynamicInputState}

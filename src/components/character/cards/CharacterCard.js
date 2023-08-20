@@ -9,7 +9,7 @@ import { renderAbilities, renderImage, renderLink, renderProficiency, renderRace
 import { raceData } from '@/data/raceData';
 import { classData } from '@/data/classData';
 // Other ----------------------------------------------------------------------------
-import { convertObjToArry, isArray, isObj } from '@/util';
+import { convertObjToArray, isArray, isObj } from '@/util';
 
 
 //______________________________________________________________________________________
@@ -20,8 +20,15 @@ const CharacterCard = ({ character, imageOverride=null }) => {
     //______________________________________________________________________________________
     // ===== Constants =====
     const raceObj = isObj(character, [ "baseData" ]) && character.baseData.race && isObj(raceData, [ character.baseData.race ]) ? raceData[character.baseData.race] : null;
-    const classes = isObj(character, [ "baseData" ]) && isArray(character.baseData.classes) ? convertObjToArry(classData, character.baseData.classes) : convertObjToArry(classData);
+    const classes = isObj(character, [ "baseData" ]) && isArray(character.baseData.classes) ? convertObjToArray(classData, character.baseData.classes) : convertObjToArray(classData);
 
+    //______________________________________________________________________________________
+    // ===== Render Functions =====
+    const renderInitiative = () => { 
+        if (!(character && character.baseData)) return renderStatBlock(character, "initiative", "Initiative", 0, false, "+");
+        const initiative = character.baseData.initiative ? character.baseData.initiative : character.baseData.initative ? character.baseData.initative : 0;
+        return renderStatBlock(character, "initiative", "Initiative", initiative, false, initiative >= 0 ? "+" : "");
+    }
 
     //______________________________________________________________________________________
     // ===== Component Return =====
@@ -29,7 +36,6 @@ const CharacterCard = ({ character, imageOverride=null }) => {
         console.warn("Something is up with this character: ", {character, raceObj, classes});
         return <div className="alert alert-info">Character missing needed data in order to render card. Please try to edit this characters data and fill in any blanks or 0's.</div>
     }
-
     return (
         <div className={styles.characterCard} style={character && character.baseData && character.baseData.classes && character.baseData.classes[0] ? { backgroundImage: `url(/images/classBackground/${character.baseData.classes[0]}.png)` } : {}}>
             <div className={styles.titlePlate}>
@@ -68,19 +74,12 @@ const CharacterCard = ({ character, imageOverride=null }) => {
                             {renderRaceAndClasses(raceObj, classes)}
                             <div></div>
                         </div>
-                        {/* <div className="flex-items-evenly">
-                            <span>Proficiency: {character.baseData.proficiency > 0 ? "+" : ""}{character.baseData.proficiency}</span>
-                            |
-                            <span>Initiative: {character.baseData.initative > 0 ? "+" : ""}{character.baseData.initative}</span>
-                            |
-                            <span>Speed: {character.baseData.speeds.walking}ft</span>
-                        </div> */}
                     </div>
                 </div>
             </div>
             <div className={`${styles.basePlate} ${styles.abilitiesPlate}`}>
                 {renderProficiency(character)}
-                {renderStatBlock(character, "initative", "Initiative", character.baseData.initative, false, character.baseData.initative >= 0 ? "+" : "")}
+                {renderInitiative()}
                 {renderStatBlock(character, "speed", "Speed", character.baseData.speeds.walking, false, null, "ft")}
             </div>
             <div className={styles.abilitiesPlate} >
