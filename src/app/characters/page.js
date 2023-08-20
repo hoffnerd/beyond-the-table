@@ -43,10 +43,6 @@ export const metadata = {
 const Page = async () => {
 
     //______________________________________________________________________________________
-    // ===== Protection =====
-    const session = await pageProtector(config);
-
-    //______________________________________________________________________________________
     // ===== Component Return =====
     return (
         <PageWrapper className="tw-my-12" title={config.title}>
