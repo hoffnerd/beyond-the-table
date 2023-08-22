@@ -37,7 +37,7 @@ const CharacterCard = ({ character, imageOverride=null }) => {
         return <div className="alert alert-info">Character missing needed data in order to render card. Please try to edit this characters data and fill in any blanks or 0's.</div>
     }
     return (
-        <div className={styles.characterCard} style={character && character.baseData && character.baseData.classes && character.baseData.classes[0] ? { backgroundImage: `url(/images/classBackground/${character.baseData.classes[0]}.png)` } : {}}>
+        <div className={styles.characterCard} style={character && character.baseData && character.baseData.classes && character.baseData.classes[0] ? { backgroundImage: `url(/images/classBackground/${character.baseData.classes[0]}.png)`, backgroundSize: "105%", animation:"unset" } : {}}>
             <div className={styles.titlePlate}>
                 <div className='tw-flex'>
                     <div style={{position:"relative"}}>

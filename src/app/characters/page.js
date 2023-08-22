@@ -61,7 +61,7 @@ const Page = async () => {
             </div>
             <br/>
             <div className={styles.characterCardsSectionOutsidePadding}>
-                <CharacterCards addLinkToCharacterPage={true} />
+                <CharacterCards />
             </div>
         </PageWrapper>
     )

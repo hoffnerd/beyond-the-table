@@ -8,7 +8,7 @@ import { useSession } from 'next-auth/react';
 import useRedirect from '@/hooks/useRedirect';
 import useFetch from '@/hooks/useFetch';
 // Components -----------------------------------------------------------------------
-import Loading from '@/components/layout/Loading';
+import LoadingCard from '@/components/character/cards/LoadingCard';
 import NoCharacter from '@/components/character/NoCharacter';
 import CharacterCard from '@/components/character/cards/CharacterCard';
 // Other ----------------------------------------------------------------------------
@@ -43,7 +43,7 @@ const PageBody = ({id}) => {
     //______________________________________________________________________________________
     // ===== Component Return =====
     
-    if (status === "loading" || character === "loading") return <Loading center={true} />;
+    if (status === "loading" || character === "loading") return <LoadingCard/>;
     if (character === "error" || !isObj(character, ["id"])) return <NoCharacter/>;
     return <CharacterCard character={character} />;
 }
