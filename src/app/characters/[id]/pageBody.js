@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react';
 // Styles ---------------------------------------------------------------------------
 // Hooks ----------------------------------------------------------------------------
 import useRedirect from '@/hooks/useRedirect';
-import useFetch from '@/hooks/useFetch';
+import useSWRFetch from '@/hooks/useSWRFetch';
 // Components -----------------------------------------------------------------------
 import LoadingCard from '@/components/character/cards/LoadingCard';
 import NoCharacter from '@/components/character/NoCharacter';
@@ -14,6 +14,8 @@ import CharacterCard from '@/components/character/cards/CharacterCard';
 // Other ----------------------------------------------------------------------------
 import { isObj } from '@/util';
 import { isCharacterVisible } from '@/util/character';
+// import { LazyLoadImage } from 'react-lazy-load-image-component';
+// import 'react-lazy-load-image-component/src/effects/blur.css';
 
 
 
@@ -24,13 +26,19 @@ import { isCharacterVisible } from '@/util/character';
 const PageBody = ({id}) => {
 
     //______________________________________________________________________________________
+    // ===== Constants =====
+    const SWROptions = { revalidateIfStale: false, revalidateOnFocus: false };
+    const options = { dataType: "object" };
+
+    //______________________________________________________________________________________
     // ===== State from Auth =====
     const { data: session, status} = useSession();
 
     //______________________________________________________________________________________
     // ===== Hooks =====
     const [ setRedirect ] = useRedirect();
-    const [ initialized, character ] = useFetch({ url: `character?id=${id}` });
+    const { isLoading, error, data: character } = useSWRFetch(`character?id=${id}`, SWROptions, null, options);
+    // const [ initialized, character ] = useFetch({ url: `character?id=${id}` });
 
     //______________________________________________________________________________________
     // ===== Use Effects =====
@@ -42,9 +50,18 @@ const PageBody = ({id}) => {
 
     //______________________________________________________________________________________
     // ===== Component Return =====
-    
-    if (status === "loading" || character === "loading") return <LoadingCard/>;
-    if (character === "error" || !isObj(character, ["id"])) return <NoCharacter/>;
+    // return(
+    //     <LazyLoadImage
+    //         alt={"test"}
+    //         src={"/images/jameswebb2022_1.jpg"}
+    //         placeholderSrc={"/images/gwent/campaign.webp"}
+    //         width={1000} 
+    //         height={1000}
+    //         effect="blur"
+    //     />
+    // )
+    if (status === "loading" || isLoading) return <LoadingCard/>;
+    if (error || !isObj(character, ["id"])) return <NoCharacter/>;
     return <CharacterCard character={character} />;
 }
 export default PageBody;

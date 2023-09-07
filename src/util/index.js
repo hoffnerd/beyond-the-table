@@ -18,6 +18,13 @@ export const valueReturnHelper = (value, useIsCheck=null) => {
 }
 
 /**
+ * The fetcher function is a helper function that makes a fetch request and returns the response as a JSON object.
+ * @param args - is a rest parameter that allows the function to accept any number of arguments. In this case, 
+ * it is used to pass any number of arguments to the `fetch` function.
+ */
+export const fetcher = (...args) => fetch(...args).then(res => res.json())
+
+/**
  * If the array is not null, is an array, and has a length greater than 0, then return true.
  * @param array - The array to check.
  */

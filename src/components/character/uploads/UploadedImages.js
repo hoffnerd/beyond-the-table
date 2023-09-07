@@ -7,9 +7,11 @@ import Image from 'next/image';
 import { useAppContext } from '@/context/AppContext';
 // Components -----------------------------------------------------------------------
 import Loading from '@/components/layout/Loading';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 // Styles ---------------------------------------------------------------------------
 // import styles from '@/styles/components/ImageUpload.module.css'
 import styles from '@/styles/components/multiformGrid.module.css'
+import 'react-lazy-load-image-component/src/effects/blur.css';
 // Other ----------------------------------------------------------------------------
 import { callAPI, isArray } from "@/util";
 
@@ -99,12 +101,15 @@ const UploadedImages = () => {
         uploads.forEach(upload => {
             images.push(
                 <a key={upload.id} className={styles.imageContainer} href={`#${upload.filename}`} onClick={(e)=>{ handleImageClick(e, upload.filename) }}>
-                    <img 
-                        className={selectedImage === upload.filename ? "tw-border-4 tw-border-sky-500" : ""}
+                    <LazyLoadImage
+                        key={upload.filename}
                         alt={upload.filename} 
-                        src={`https://uploadthing.com/f/${upload.filename}`} 
-                        width={150} 
-                    /> 
+                        className={selectedImage === upload.filename ? "tw-border-4 tw-border-sky-500" : ""}
+                        effect="blur"
+                        src={`https://uploadthing.com/f/${upload.filename}`}
+                        placeholderSrc={`/images/classBackground/basic_low.webp`}
+                        width={150}
+                    />
                 </a>
             );
         });

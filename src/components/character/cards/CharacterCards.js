@@ -5,27 +5,32 @@
 import styles from '@/styles/components/CharacterCard.module.css'
 // Components -----------------------------------------------------------------------
 import Loading from '@/components/layout/Loading';
+import LoadingCard from './LoadingCard';
 import CharacterCard from '@/components/character/cards/CharacterCard';
 import AnimatedCard from './AnimatedCard';
 // Hooks ----------------------------------------------------------------------------
 import { useAppContext } from '@/context/AppContext';
 import useFetch from '@/hooks/useFetch';
+import useSWRFetch from '@/hooks/useSWRFetch';
 import useMasterInputs from '@/hooks/useMasterInputs';
 // Data -----------------------------------------------------------------------------
 import { amountOfCardsToLoad } from '@/data/_config';
 import { characterFilters } from '@/data/filters';
 // Other ----------------------------------------------------------------------------
-import { callAPI, isArray, isObj } from '@/util';
+import { isArray, isObj } from '@/util';
 import { Fragment, useEffect, useState } from 'react';
 import { filterCharacters } from '@/util/character';
-import LoadingCard from './LoadingCard';
 
 
 //______________________________________________________________________________________
 // ===== Component =====
 
 /* This is the character page of the site */
-const CharacterCards = ({ children, childrenType=false, apiPath="characters", pageHasSideBar=false}) => {
+const CharacterCards = ({ children, childrenType=false, path="characters", pageHasSideBar=false}) => {
+
+    //______________________________________________________________________________________
+    // ===== Constants =====
+    const SWROptions = { revalidateIfStale: false, revalidateOnFocus: false };
 
     //______________________________________________________________________________________
     // ===== State from AppContext =====
@@ -38,8 +43,9 @@ const CharacterCards = ({ children, childrenType=false, apiPath="characters", pa
 
     //______________________________________________________________________________________
     // ===== Hooks =====
-    const [ initialized, characters ] = useFetch({ url: apiPath, cache: 'no-store' });
-    const { renderInputsSection, dynamicInputState } = useMasterInputs(initialized, characterFilters)
+    // const [ initialized, characters ] = useFetch({ url: apiPath, cache: 'no-store' });
+    const { isLoading, error, data: characters } = useSWRFetch(path, SWROptions);
+    const { renderInputsSection, dynamicInputState } = useMasterInputs(!isLoading, characterFilters)
 
 
     //______________________________________________________________________________________
@@ -65,7 +71,7 @@ const CharacterCards = ({ children, childrenType=false, apiPath="characters", pa
     }
     
     const renderNoCharacters = () => {
-        if((isArray(characters) && isArray(filteredCharacters)) || characters === "loading" || filteredCharacters === null) return;
+        if((isArray(characters) && isArray(filteredCharacters)) || isLoading || filteredCharacters === null) return;
         if (childrenType === "noCharacters") return children;
         return (
             <div className="container">
@@ -78,7 +84,7 @@ const CharacterCards = ({ children, childrenType=false, apiPath="characters", pa
     }
 
     const renderCard = (index) => {
-        if (characters === "loading" || filteredCharacters === null) return <LoadingCard />;
+        if (isLoading || filteredCharacters === null) return <LoadingCard />;
         
         const character = isArray(filteredCharacters) ? filteredCharacters[index] : null;
         if (isObj(character, [ "id" ])){
@@ -101,17 +107,17 @@ const CharacterCards = ({ children, childrenType=false, apiPath="characters", pa
 
     const renderLoadMoreButton = () => {
         // if(!(amountOfCardsToLoad && isArray(characters) && amountOfCardsToLoad <= characters.length)) return;
-        if(!((isArray(characters) && isArray(filteredCharacters)) || characters === "loading" || filteredCharacters === null)) return;
+        if(!((isArray(characters) && isArray(filteredCharacters)) || isLoading || filteredCharacters === null)) return;
         const disabled = isArray(filteredCharacters) && amountToLoad >= filteredCharacters.length;
         return(
             <div className='container'>
                 <div className="d-grid gap-2 col-md-8 mx-auto">
                     <button 
                         className="tw-float-right btn btn-brand btn-lg"
-                        onClick={()=>{ if(!(characters === "loading" || disabled)) setAmountToLoad(amountToLoad + amountOfCardsToLoad); }}
-                        disabled={characters === "loading" || disabled}
+                        onClick={()=>{ if(!(isLoading || disabled)) setAmountToLoad(amountToLoad + amountOfCardsToLoad); }}
+                        disabled={isLoading || disabled}
                     >
-                        {characters === "loading" ? "...Loading..." : disabled ? filteredCharacters.length !== characters.length ? "All Filtered Characters Loaded" : "All Characters Loaded" : "Load More"}
+                        {isLoading ? "...Loading..." : disabled ? filteredCharacters.length !== characters.length ? "All Filtered Characters Loaded" : "All Characters Loaded" : "Load More"}
                     </button>
                 </div>
             </div>
@@ -121,7 +127,7 @@ const CharacterCards = ({ children, childrenType=false, apiPath="characters", pa
 
     //______________________________________________________________________________________
     // ===== Component Return =====
-    if(characters === "error") return renderError();
+    if(error) return renderError();
     return (
         <Fragment>
             <div className='container' style={{height:"77px"}}>

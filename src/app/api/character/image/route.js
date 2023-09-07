@@ -11,48 +11,23 @@ import { isCharactersOwner } from '@/util/character';
 //______________________________________________________________________________________
 // ===== Patch Method for /api/character/image =====
 
-export async function POST(request) {
+export async function PUT(request) {
 
-
-    //______________________________________________________________________________________
-    // ===== deconstruct request body/payload =====
-
-    const { characterId, selectedImage, zoom, x, y } = await request.json();
+    // deconstruct request body/payload
+    const { character } = await request.json();
     
-    
-
-    /* set up our image obj to add to the character */
-    const image = {
-        filename: selectedImage ? selectedImage : undefined,
-        zoom: zoom ? zoom : undefined,
-        x: x ? x : undefined,
-        y: y ? y : undefined,
-    }
-
-    
-
-    //______________________________________________________________________________________
-    // ===== Protection =====
-    
+    // Protection
     const { authorized, message, session} = await apiProtector({ requiredRole: "USER" });
-    if( !authorized )  NextResponse.json({done: false, authorized, message: message ? message : "Unauthorized!", characterId, image });
+    if( !authorized )  NextResponse.json([false, message ? message : "Unauthorized!", authorized ]);
 
-    const characterBeforeUpdate = await readCharacterById(characterId);
-    if ( !isCharactersOwner(characterBeforeUpdate, session) ) NextResponse.json({done: false, authorized, message: "You are not the owner of this character!", characterId, image });
-
-
-
-
-    //______________________________________________________________________________________
-    // ===== Use Prisma function to update the data in the DB =====
-
-    const character = await updateCharactersImage(characterId, image);
-    
+    // More Protection
+    const characterBeforeUpdate = await readCharacterById(character.id);
+    if ( !isCharactersOwner(characterBeforeUpdate, session) ) NextResponse.json([false, "You are not the owner of this character!", authorized ]);
 
 
+    //  Use Prisma function to update the data in the DB
+    const updatedCharacter = await updateCharactersImage(character.id, character.image);
 
-    //______________________________________________________________________________________
-    // ===== API Return =====
-
-    return NextResponse.json({done: true, character});
+    // API Return
+    return NextResponse.json([true, "Success!", updatedCharacter]);
 }

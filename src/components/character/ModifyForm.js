@@ -2,10 +2,11 @@
 
 // React/Next -----------------------------------------------------------------------
 import { Fragment, useEffect, useState } from 'react';
-import { redirect } from 'next/navigation';
+import { useSWRConfig } from 'swr';
 // Styles ---------------------------------------------------------------------------
 import styles from '@/styles/components/Tabs.module.css'
 // Hooks ----------------------------------------------------------------------------
+import useRedirect from '@/hooks/useRedirect';
 import useMasterInputs from '@/hooks/useMasterInputs';
 // Components -----------------------------------------------------------------------
 import CardForm from './CardForm';
@@ -13,14 +14,13 @@ import CardForm from './CardForm';
 import { abilitiesPossible, characterBaseData, characterQuote } from '@/data/character';
 // Other ----------------------------------------------------------------------------
 import { callAPI, convertObjToArray, fireSwal, isObj } from '@/util';
-import { generateAbilityScores } from '@/util/character';
-import useRedirect from '@/hooks/useRedirect';
+import { generateAbilityScores, processCharacter } from '@/util/character';
 
 
 //______________________________________________________________________________________
 // ===== Component =====
 
-const ModifyForm = ({ character=null }) => {
+const ModifyForm = ({ character=null, type="create", runMutation=null }) => {
 
     //______________________________________________________________________________________
     // ===== Constants =====
@@ -49,6 +49,7 @@ const ModifyForm = ({ character=null }) => {
     //______________________________________________________________________________________
     // ===== Component Hooks =====
     const [ setRedirect ] = useRedirect();
+    const { mutate: globalMutate } = useSWRConfig();
     const baseInputsHook = useMasterInputs(true, dataStructure, character ? baseDataToFillInputState : null);
     const abilitiesInputsHook = useMasterInputs(true, abilitiesPossible, isObj(character, ["abilities"]) ? generateAbilityScores(character.abilities) : null);
     const quoteInputsHook = useMasterInputs(true, [characterQuote], character && character.baseData && character.baseData.quote ? { quote: character.baseData.quote } : null);
@@ -65,36 +66,70 @@ const ModifyForm = ({ character=null }) => {
 
 
     //______________________________________________________________________________________
-    // ===== Functions Used Only Within useEffects =====
-
-    const handleSave = async () => {
-        const { done, message, character: savedCharacter } = await callAPI(
-            { url: "character", method: isObj(character, ["id" ]) ? "PUT" : "POST" }, 
-            { 
-                characterId: isObj(character, ["id" ]) ? character.id : null,
-                baseDataInputState: baseInputsHook.dynamicInputState, 
-                abilitiesInputState: abilitiesInputsHook.dynamicInputState,
-                quoteInputState: quoteInputsHook.dynamicInputState
-            }
-        );
-        // console.log({ done, savedCharacter });
-
-        if(done && isObj(savedCharacter, [ 'id' ])){
-            setRedirect(`/characters/${savedCharacter.id}/edit/image`);
-        } else {
-            fireSwal({ icon: "error", text: message })
-            setIsSaving(false);
-        }
-    }
-    
-
-
-    //______________________________________________________________________________________
     // ===== Handler Functions =====
 
     const handleTabClick = (e, key) => {
         e.preventDefault();
         if(openTab !== key) setOpenTab(key);
+    }
+
+    const handleError = (message) => {
+        fireSwal({ icon: "error", text: message })
+        setIsSaving(false);
+    }
+
+    const clearCache = async (savedCharacterId) => {
+        const inputVisibility = baseInputsHook && isObj(baseInputsHook.dynamicInputState, [ "visibility" ]) ? baseInputsHook.dynamicInputState.visibility : null;
+        if(inputVisibility === "PUBLIC" || (inputVisibility !== "PUBLIC" && character && character.visibility === "PUBLIC")){
+            // clear the cache of the call used on the characters page
+            await globalMutate(`/api/characters`, undefined);
+        }
+
+        // clear the cache of the call used on the dashboard
+        await globalMutate(`/api/auth/characters`, undefined);
+        
+        // redirect to new character
+        setRedirect(`/characters/${savedCharacterId}/edit/image`);
+    }
+
+    const handleUpdate = async (processedCharacter) => {
+        const {error, message, dataObj: savedCharacter } = await runMutation("update", { character: processedCharacter });
+        console.log({error, message, savedCharacter})
+
+        if((!error) && isObj(savedCharacter, [ 'id' ])){
+            await clearCache(savedCharacter.id);
+        } else {
+            handleError(message);
+        }
+        return !error;
+    }
+
+    const handleCreate = async (processedCharacter) => {
+        const [ done, message, savedCharacter ] = await callAPI( { url: "character", method: "POST" }, { character: processedCharacter } );
+        console.log({done, message, savedCharacter})
+
+        if(done && isObj(savedCharacter, [ 'id' ])){
+            await clearCache(savedCharacter.id);
+        } else {
+            handleError(message);
+        } 
+        return done;
+    }
+
+    const handleSave = async () => {
+
+        // error out if wrong type passed in
+        if(!(type === "create" || type === "update")) return console.error("Invalid type in handleSave", { type });
+
+        // payload to pass both create and update
+        const characterId = isObj(character, ["id" ]) ? character.id : null;
+        const processedCharacter = processCharacter(characterId, baseInputsHook.dynamicInputState, abilitiesInputsHook.dynamicInputState, quoteInputsHook.dynamicInputState);
+        
+        // handle create, return at the end for never nesting
+        if(type === "create") return await handleCreate(processedCharacter);
+
+        // run update mutation
+        return await handleUpdate(processedCharacter);
     }
 
 

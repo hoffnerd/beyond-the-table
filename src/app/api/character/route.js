@@ -1,20 +1,28 @@
 // React/Next --------------------------------------------------------
 import { NextResponse } from 'next/server'
 // Prisma ------------------------------------------------------------
-import { readCharacterById, createCharacter, updateCharacter, extractDataFromRequest, processCharacter, deleteCharacter, readCharacters } from '@/lib/character';
+import { readCharacterById, createCharacter, updateCharacter, deleteCharacter } from '@/lib/character';
 // Data --------------------------------------------------------------
 // Util --------------------------------------------------------------
 import { apiProtector, readServerSession } from '@/lib/protector';
-import { convertObjToArray, isArray, isObj } from '@/util';
+import { isObj } from '@/util';
 import { isCharacterVisible } from '@/util/character';
-import { characterBaseData } from '@/data/character';
 
+
+
+//______________________________________________________________________________________
+// ===== Conditional Functions =====
+
+const characterValid = (character) => {
+    return isObj(character, [ "visibility", "name" ]) && isObj(character.baseData, [ "level", "hitpoints", "armor", "race", "classes", "speeds" ]) && isObj(character.abilities);
+}
 
 
 
 //______________________________________________________________________________________
 // ===== Get Method for /api/character =====
 export async function GET(request) {
+    console.log("character GET hit")
 
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
@@ -34,55 +42,19 @@ export async function GET(request) {
 
 export async function POST(request) {
 
+    // Extract Data from Request
+    const { character } = await request.json();
+    if(!(characterValid(character))) return NextResponse.json([false, "Missing character data!", character ]);
 
-
-    //______________________________________________________________________________________
-    // ===== Extract Data from Request =====
-
-    const { error, message: msg, baseDataInputState, abilitiesInputState, quoteInputState, baseDataInputStateKeys, abilitiesInputStateKeys } = await extractDataFromRequest(request);
-    if(error) return NextResponse.json({done: false, message: msg, baseDataInputState, abilitiesInputState, quoteInputState, baseDataInputStateKeys, abilitiesInputStateKeys });
-
-
-
-    //______________________________________________________________________________________
-    // ===== Protection =====
-    
+    // Protection
     const { authorized, message, session} = await apiProtector({ requiredRole: "USER" });
-    if( !authorized ) return NextResponse.json({done: false, authorized, message: message ? message : "Unauthorized!" });
+    if( !authorized ) return NextResponse.json([false, message ? message : "Unauthorized!", authorized ]);
 
+    // Use Prisma to create the data in the DB
+    const newCharacter = await createCharacter({ ...character, userEmail: session.user.email });
 
-
-    //______________________________________________________________________________________
-    // ===== process the character data  =====
-
-    let errorMsg = false
-    const dataStructure = convertObjToArray(characterBaseData);
-    for(let i = 0; i < dataStructure.length; i++){
-        const dataStructureObj = dataStructure[i];
-        if(dataStructureObj.required && !(dataStructureObj.key && baseDataInputState[dataStructureObj.key])){
-            errorMsg = `Missing ${dataStructureObj.display}!`
-            break;
-        }
-    }
-    if( errorMsg ) return NextResponse.json({done: false, message: errorMsg });
-
-
-    const data = await processCharacter(baseDataInputState, abilitiesInputState, quoteInputState, baseDataInputStateKeys, abilitiesInputStateKeys);
-
-
-
-    //______________________________________________________________________________________
-    // ===== Use Prisma to create the data in the DB =====
-
-    const character = await createCharacter({ userEmail: session.user.email, ...data });
-    
-
-
-
-    //______________________________________________________________________________________
-    // ===== API Return =====
-
-    return NextResponse.json({done: true, character});
+    // API Return
+    return NextResponse.json([true, "Success!", newCharacter]);
 }
 
 
@@ -92,58 +64,25 @@ export async function POST(request) {
 
 export async function PUT(request) {
 
+    // Extract Data from Request
+    const { character } = await request.json();
+    if(!(characterValid(character))) return NextResponse.json([false, "Missing character data!", character ]);
+    if(!character.id){ return NextResponse.json([false, "Missing Character Id!", character ]) };
 
-
-    //______________________________________________________________________________________
-    // ===== Extract Data from Request =====
-
-    const { error, message: msg, characterId, baseDataInputState, abilitiesInputState, quoteInputState, baseDataInputStateKeys, abilitiesInputStateKeys } = await extractDataFromRequest(request);
-    if(error){ return NextResponse.json({done: false, message: msg, characterId, baseDataInputState, abilitiesInputState, quoteInputState, baseDataInputStateKeys, abilitiesInputStateKeys }); }
-    if(!characterId){ return NextResponse.json({done: false, message: "Missing Character Id!", characterId }) };
-
-    
-
-    //______________________________________________________________________________________
-    // ===== Protection =====
-    
+    // Protection
     const { authorized, message, session} = await apiProtector({ requiredRole: "USER" });
-    if( !authorized ) return NextResponse.json({done: false, authorized, message: message ? message : "Unauthorized!" });
+    if( !authorized ) return NextResponse.json([false, message ? message : "Unauthorized!", authorized]);
 
-
-    const characterBeforeUpdate = await readCharacterById(characterId);
-    if( !(isObj(characterBeforeUpdate, ["id", "userEmail"]) && characterBeforeUpdate.userEmail === session.user.email) ){
-        return NextResponse.json({done: false, message: "This is not your character!" });
-    }
-
-
-    //______________________________________________________________________________________
-    // ===== process the character data  =====
-    let errorMsg = false
-    const dataStructure = convertObjToArray(characterBaseData);
-    for(let i = 0; i < dataStructure.length; i++){
-        const dataStructureObj = dataStructure[i];
-        if(dataStructureObj.required && !(dataStructureObj.key && baseDataInputState[dataStructureObj.key])){
-            errorMsg = `Missing ${dataStructureObj.display}!`
-            break;
-        }
-    }
-    if( errorMsg ) return NextResponse.json({done: false, message: errorMsg });
-
-    const data = await processCharacter(baseDataInputState, abilitiesInputState, quoteInputState, baseDataInputStateKeys, abilitiesInputStateKeys);
-
-
+    // More Protection
+    const characterBeforeUpdate = await readCharacterById(character.id);
+    if( !(isObj(characterBeforeUpdate, ["id", "userEmail"]) && characterBeforeUpdate.userEmail === session.user.email) )
+        return NextResponse.json([false, "This is not your character!" ])
     
-    //______________________________________________________________________________________
-    // ===== Use Prisma to create the data in the DB =====
+    // Use Prisma to create the data in the DB
+    const updatedCharacter = await updateCharacter(character.id, character);
 
-    const character = await updateCharacter(characterId, data);
-    
-
-
-    //______________________________________________________________________________________
-    // ===== API Return =====
-
-    return NextResponse.json({done: true, character});
+    // API Return
+    return NextResponse.json([true, "Success!", updatedCharacter]);
 }
 
 

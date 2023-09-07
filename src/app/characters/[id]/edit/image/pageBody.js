@@ -8,7 +8,7 @@ import { useSession } from 'next-auth/react';
 import styles from '@/styles/components/multiformGrid.module.css'
 // Hooks ----------------------------------------------------------------------------
 import useRedirect from '@/hooks/useRedirect';
-import useFetch from '@/hooks/useFetch';
+import useSWRFetch from '@/hooks/useSWRFetch';
 // Components -----------------------------------------------------------------------
 import Loading from '@/components/layout/Loading';
 import NoCharacter from '@/components/character/NoCharacter';
@@ -29,6 +29,12 @@ import { useAppContext } from '@/context/AppContext';
 const PageBody = ({id}) => {
 
     //______________________________________________________________________________________
+    // ===== Constants =====
+    const SWROptions = { revalidateIfStale: false, revalidateOnFocus: false };
+    const options = { dataType: "object", pathUpdate: "character/image", pathInvalidateAfterMutate: "auth/characters"};
+
+
+    //______________________________________________________________________________________
     // ===== State from Auth =====
     const { data: session, status} = useSession();
 
@@ -39,7 +45,7 @@ const PageBody = ({id}) => {
     //______________________________________________________________________________________
     // ===== Hooks =====
     const [ setRedirect ] = useRedirect();
-    const [ initialized, character ] = useFetch({ url: `character?id=${id}` });
+    const { isLoading, error, data: character, runMutation } = useSWRFetch(`character?id=${id}`, SWROptions, null, options);
 
     //______________________________________________________________________________________
     // ===== Use Effects =====
@@ -58,11 +64,11 @@ const PageBody = ({id}) => {
 
     //______________________________________________________________________________________
     // ===== Component Return =====
-    if (status === "loading" || character === "loading") return <Loading center={true} />;
-    if (character === "error" || !isObj(character, ["id"])) return <NoCharacter/>;
+    if (status === "loading" || isLoading) return <Loading center={true} />;
+    if (error || !isObj(character, ["id"])) return <NoCharacter/>;
     return (
         <div className={styles.multiformGrid}>
-            <ImagePlacement character={character} />
+            <ImagePlacement character={character} runMutation={runMutation} />
             <div className={`${styles.rightForm} ${sidebarOpen ? styles.sidebarOpen : styles.sidebarClosed}`}>
                 <Uploader />
                 <div className={styles.heightScroller}>

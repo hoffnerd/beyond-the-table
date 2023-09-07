@@ -2,16 +2,12 @@
 import { redirect } from 'next/navigation';
 // Components -----------------------------------------------------------------------
 import PageWrapper from '@/components/layout/PageWrapper';
-import ModifyForm from '@/components/character/ModifyForm';
+import PageBody from './pageBody';
 // SeverFunctions -------------------------------------------------------------------
 import { pageProtector } from '@/lib/protector';
 import { readCharacterByIdFromParams } from '@/lib/character';
 // Other ----------------------------------------------------------------------------
 import { isObj } from '@/util';
-import { isCharactersOwner } from '@/util/character';
-import CharacterCard from '@/components/character/cards/CharacterCard';
-import DeleteForm from '@/components/character/DeleteForm';
-import PageBody from './pageBody';
 
 
 

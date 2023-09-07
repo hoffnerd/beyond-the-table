@@ -116,7 +116,7 @@
     margin: auto;
 
     /* background-color: var(--mainBackgroundColor); */
-	background: linear-gradient(-45deg, var(--brand), #212529, rgb(68 64 60), #212529, var(--brand));
+	background: linear-gradient(-45deg, var(--brand), var(--mainBackgroundColor), rgb(142, 143, 151), var(--mainBackgroundColor), var(--brand));
 	background-size: 400% 200%;
 	animation: gradient 5s ease infinite;
 

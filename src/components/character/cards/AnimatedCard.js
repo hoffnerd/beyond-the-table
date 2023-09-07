@@ -4,6 +4,7 @@ import Link from 'next/link'
 // Styles ---------------------------------------------------------------------------
 import styles from '@/styles/components/AnimatedCard.module.css'
 // Components -----------------------------------------------------------------------
+import LazyLoadNextImage from '@/components/LazyLoadNextImage'
 // Data -----------------------------------------------------------------------------
 import { animationsActive } from '@/data/_config'
 // Other ----------------------------------------------------------------------------
@@ -26,7 +27,7 @@ const AnimatedCard = ({children, characterId}) => {
                     {children}
                 </div>
                 <div className={`${styles.image} ${styles.back}`}>
-                    <Image className={styles.img} alt={`Card Back`} src={`/images/menu/menu_neutral.png`} width={350} height={500}/>
+                    <LazyLoadNextImage className={styles.img} alt={`Card Back`} imageKey={`menu_neutral`} width={350} height={500}/>
                 </div>
             </div>
         </Link>
