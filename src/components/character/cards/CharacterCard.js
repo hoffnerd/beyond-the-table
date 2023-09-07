@@ -46,7 +46,7 @@ const CharacterCard = ({ character, imageOverride=null }) => {
                     effect="blur"
                     src={`/images/classBackground/${character.baseData.classes[0]}.webp`}
                     placeholderSrc={`/images/classBackground/${character.baseData.classes[0]}_low.webp`}
-                    width={340}
+                    width={350}
                 />
             </div>
             <div className={styles.titlePlate}>

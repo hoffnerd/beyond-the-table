@@ -4,13 +4,11 @@
 // Styles ---------------------------------------------------------------------------
 import styles from '@/styles/components/CharacterCard.module.css'
 // Components -----------------------------------------------------------------------
-import Loading from '@/components/layout/Loading';
 import LoadingCard from './LoadingCard';
 import CharacterCard from '@/components/character/cards/CharacterCard';
 import AnimatedCard from './AnimatedCard';
 // Hooks ----------------------------------------------------------------------------
 import { useAppContext } from '@/context/AppContext';
-import useFetch from '@/hooks/useFetch';
 import useSWRFetch from '@/hooks/useSWRFetch';
 import useMasterInputs from '@/hooks/useMasterInputs';
 // Data -----------------------------------------------------------------------------
@@ -130,7 +128,7 @@ const CharacterCards = ({ children, childrenType=false, path="characters", pageH
     if(error) return renderError();
     return (
         <Fragment>
-            <div className='container' style={{height:"77px"}}>
+            <div className={`container ${styles.characterCardsInputs}`}>
                 {renderInputsSection()}
             </div>
             <br/>

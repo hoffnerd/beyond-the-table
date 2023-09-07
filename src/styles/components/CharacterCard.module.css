@@ -26,6 +26,16 @@
 /*______________________________________________________________________________________
     ===== Styles for the section =====
 */
+.characterCardsInputs{
+    height: 77px;
+}
+
+@media only screen and (max-width: 767px){
+    .characterCardsInputs{
+        height: 308px;
+    }
+}
+
 .characterCardsSection{
     display: grid;
 }
