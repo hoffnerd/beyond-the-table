@@ -2,6 +2,21 @@
 import Image from 'next/image';
 // Styles ---------------------------------------------------------------------------
 // Images ---------------------------------------------------------------------------
+// Class Background Images ---------------------------------------------------------------
+import bg_artificer from '../../public/images/classBackground/artificer.webp';
+import bg_barbarian from '../../public/images/classBackground/barbarian.webp';
+import bg_bard from '../../public/images/classBackground/bard.webp';
+import bg_bloodhunter from '../../public/images/classBackground/bloodhunter.webp';
+import bg_cleric from '../../public/images/classBackground/cleric.webp';
+import bg_druid from '../../public/images/classBackground/druid.webp';
+import bg_fighter from '../../public/images/classBackground/fighter.webp';
+import bg_monk from '../../public/images/classBackground/monk.webp';
+import bg_paladin from '../../public/images/classBackground/paladin.webp';
+import bg_ranger from '../../public/images/classBackground/ranger.webp';
+import bg_rogue from '../../public/images/classBackground/rogue.webp';
+import bg_sorcerer from '../../public/images/classBackground/sorcerer.webp';
+import bg_warlock from '../../public/images/classBackground/warlock.webp';
+import bg_wizard from '../../public/images/classBackground/wizard.webp';
 // Class Icons Images ---------------------------------------------------------------
 import ci_artificer from '../../public/images/classIcons/artificer.webp';
 import ci_barbarian from '../../public/images/classIcons/barbarian.webp';
@@ -41,6 +56,7 @@ import shield from '../../public/shield2.png';
 import { isObj } from '@/util';
 
 const images = { 
+    bg_artificer, bg_barbarian, bg_bard, bg_bloodhunter, bg_cleric, bg_druid, bg_fighter, bg_monk, bg_paladin, bg_ranger, bg_rogue, bg_sorcerer, bg_warlock, bg_wizard,
     ci_artificer, ci_barbarian, ci_bard, ci_bloodhunter, ci_cleric, ci_druid, ci_fighter, ci_monk, ci_paladin, ci_ranger, ci_rogue, ci_sorcerer, ci_warlock, ci_wizard,
     campaign, campaignNew, character, characterNew, encounters, encountersNew, items, itemsNew, monsters, monstersNew, spells, spellsNew,
     menu_coming, menu_future, menu_neutral,

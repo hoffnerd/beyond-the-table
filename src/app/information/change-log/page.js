@@ -49,6 +49,17 @@ const Page = async () => {
     // ===== Component Return =====
     return (
         <PageWrapper className="container" title={config.title} subtitle={config.description}>
+            
+            <div id="1.1.1" className='tw-mt-4'>
+                <h3>Loading Loader Loads! Part 2: The Fix</h3>
+                <p>September 7th, 2023 | Version 1.1.1</p>
+                <div className="branded-line short tw-mb-4"></div>
+                <p>Fixed some of the class backgrounds not being full height.</p>
+                <p>Fixed cards overlapping the filter inputs on mobile.</p>
+            </div>
+
+            {renderLineBreak()}
+
             <div id="1.1.0" className='tw-mt-4'>
                 <h3>Loading Loader Loads!</h3>
                 <p>September 6th, 2023 | Version 1.1.0</p>
