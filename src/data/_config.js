@@ -1,7 +1,7 @@
 
 /*
     Each component may have their own config objects. 
-    This is just a master one of either shared settings acrossed multiple componets, 
+    This is just a master one of either shared settings across multiple components, 
     or just easier to have here so I dont have to search multiple files to turn off random features.
 */
 

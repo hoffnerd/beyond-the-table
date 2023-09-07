@@ -2,10 +2,12 @@
 // React/Next -----------------------------------------------------------------------
 import Link from 'next/link';
 import Image from 'next/image';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 // Data -----------------------------------------------------------------------------
 import { abilitiesPossible } from '@/data/character';
 // Styles ---------------------------------------------------------------------------
 import styles from '@/styles/components/CharacterCard.module.css'
+import 'react-lazy-load-image-component/src/effects/blur.css';
 // Other ----------------------------------------------------------------------------
 import { isArray, isObj } from ".";
 import { calculateModifierNumber, calculateProficiency } from "./character";
@@ -72,7 +74,7 @@ export const renderStatBlock = (character, key, display, score, shouldCreateModi
             </div>
             {shouldCreateModifierNumber ?
                 <div style={{ marginTop: "-8px" /* -10px */ }}>
-                    <span className={styles.score} style={{ backgroundImage: `url(/images/classBackground/${character.baseData.classes[0]}.png)` }}>
+                    <span className={styles.score} style={{ backgroundImage: `url(/images/classBackground/${character.baseData.classes[0]}.webp)` }}>
                         &nbsp;&nbsp;{score}&nbsp;&nbsp;
                     </span>
                 </div>
@@ -132,19 +134,23 @@ export const renderRaceAndClasses = (raceObj, classes) => {
  * @returns either an `Image` component with the character's image if it exists, or a `div` element with a question mark symbol if the character's image is not available.
  */
 export const renderImage = (character) => {
-    if(isObj(character, ["image"]) && isObj(character.image, ["filename"])){
-        return (
-            <img 
-                alt={character.name} 
-                src={`https://uploadthing.com/f/${character.image.filename}`} 
-                width={302} 
-                style={{
-                    scale: character.image.zoom ? 1 + (character.image.zoom * 0.1) : 1,
-                    marginLeft: character.image.x ? `${character.image.x}px` : '0px',
-                    marginTop: character.image.y ? `${character.image.y}px` : '0px',
-                }} 
-            />
-        )
-    }
-    return <div className="tw-text-center" style={{ fontSize: "12rem" }}>?</div>
+    if(!(isObj(character, ["image"]) && isObj(character.image, ["filename"])))
+        return <div className="tw-text-center" style={{ fontSize: "12rem" }}>?</div>;
+
+    return (
+        <LazyLoadImage
+            key={character.image.filename}
+            alt={character.name}
+            effect="blur"
+            src={`https://uploadthing.com/f/${character.image.filename}`}
+            placeholderSrc={`/images/classBackground/${character.baseData.classes[0]}_low.webp`}
+            width={302} 
+            height={302}
+            style={{
+                scale: character.image.zoom ? 1 + (character.image.zoom * 0.1) : 1,
+                marginLeft: character.image.x ? `${character.image.x}px` : '0px',
+                marginTop: character.image.y ? `${character.image.y}px` : '0px',
+            }} 
+        />
+    )
 }

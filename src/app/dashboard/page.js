@@ -58,7 +58,7 @@ const Page = async () => {
             </div>
             <br />
             <div className={styles.characterCardsSectionOutsidePadding}>
-                <CharacterCards apiPath={"auth/characters"} pageHasSideBar={true} childrenType={"noCharacters"}>
+                <CharacterCards childrenType={"noCharacters"} path={"auth/characters"} pageHasSideBar={true}>
                     <div className="container">
                         <div className="alert alert-warning tw-text-center">
                             <strong>Oops!</strong> Looks like you don't have any characters. <Link href="/characters/create">Click here to make one!</Link>

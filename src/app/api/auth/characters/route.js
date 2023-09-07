@@ -7,6 +7,7 @@ import { apiProtector } from "@/lib/protector";
 //______________________________________________________________________________________
 // ===== GET =====
 export async function GET() {
+    console.log("user characters GET hit")
 
     //______________________________________________________________________________________
     // ===== Protection =====

@@ -6,6 +6,7 @@ import Image from 'next/image';
 import styles from '@/styles/components/CharacterCard.module.css'
 // Components -----------------------------------------------------------------------
 import Loading from '../layout/Loading';
+import LazyLoadNextImage from '../LazyLoadNextImage';
 import Standard from '../inputs/basic/Standard';
 import Select from '../inputs/basic/Select';
 import TextArea from '../inputs/basic/TextArea';
@@ -69,7 +70,7 @@ const CardForm = ({character, baseDataInputState, setBaseDataInputState, abiliti
                     {calculateModifierNumber(abilitiesInputState[abilityObj.key])}
                 </div>
                 <div style={{ marginTop: "-10px" }}>
-                    <div className={styles.score} style={baseDataInputState.classes ? { backgroundImage: `url(/images/classBackground/${baseDataInputState.classes}.png)`} : {}}>
+                    <div className={styles.score} style={baseDataInputState.classes ? { backgroundImage: `url(/images/classBackground/${baseDataInputState.classes}_low.webp)`} : {}}>
                         {renderStandardInput(`${styles.correctPadding}`, abilityObj, abilitiesInputState, setAbilitiesInputState)}
                     </div>
                 </div>
@@ -131,7 +132,7 @@ const CardForm = ({character, baseDataInputState, setBaseDataInputState, abiliti
                 <div className='col-sm-4'></div>
             </div>
             <br/>
-            <div className={styles.characterCard} style={baseDataInputState.classes ? { backgroundImage: `url(/images/classBackground/${baseDataInputState.classes}.png)`} : {}} >
+            <div className={styles.characterCard} style={baseDataInputState.classes ? { backgroundImage: `url(/images/classBackground/${baseDataInputState.classes}.webp)`, backgroundSize: "105%", animation:"unset"} : { backgroundImage: "unset", animation:"unset" }} >
                 <div className={styles.titlePlate}>
                     <div className='tw-flex'>
                         <div style={{ position: "relative" }}>
@@ -139,7 +140,7 @@ const CardForm = ({character, baseDataInputState, setBaseDataInputState, abiliti
                                 Lvl:{renderStandardInput(`${styles.correctPadding} ${styles.levelInput}`, characterBaseData.level)}
                             </div>
                             <div style={{ position: "absolute", marginLeft: "-5px", zIndex: 9 }}>
-                                <Image alt="AC" src="/shield2.png" width={50} height={50} />
+                                <LazyLoadNextImage alt="AC" imageKey="shield" width={50} height={50} />
                                 <div className={`${styles.armor} ${styles.armorInputContainter}`}>
                                     {renderStandardInput(`${styles.correctPadding} ${styles.armorInput}`, characterBaseData.armor)}
                                 </div>
@@ -155,10 +156,10 @@ const CardForm = ({character, baseDataInputState, setBaseDataInputState, abiliti
                         </div>
                         &nbsp;
                         <div className={styles.classIcon}>
-                            {baseDataInputState.classes ?
-                                <Image
+                            {baseDataInputState.classes && baseDataInputState.classes !== "pleaseSelect" ?
+                                <LazyLoadNextImage
                                     alt={baseDataInputState.classes}
-                                    src={`/images/classIcons/${baseDataInputState.classes}.webp`}
+                                    imageKey={`ci_${baseDataInputState.classes}`}
                                     width={25}
                                     height={25}
                                 />

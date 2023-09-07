@@ -49,6 +49,32 @@ const Page = async () => {
     // ===== Component Return =====
     return (
         <PageWrapper className="container" title={config.title} subtitle={config.description}>
+            <div id="1.1.0" className='tw-mt-4'>
+                <h3>Loading Loader Loads!</h3>
+                <p>September 6th, 2023 | Version 1.1.0</p>
+                <div className="branded-line short tw-mb-4"></div>
+                <p>This one is big one behind the scenes. Ya'll won't see too much but if you have slower internet, you should be able to feel the site act and load better.</p>
+                <p>I added a nice loading animation for cards. In all my years of web dev, never realized how easy working with color gradients were.</p>
+                <p>
+                    Similarly, I never worked with lazy loading images before, actually super easy in NextJS. The issue becomes the rate limit. Its very 
+                    generous at a 1000 images but because this site allows for user uploads, not gonna let ya'll take all my free Next Images, sooooo I 
+                    needed a different solution. I opted to use a library for ReactJS to lazy load user uploaded images and this was super easy to set up.
+                </p>
+                <p>
+                    Biggest impact behind the scenes, and the most fun for me to work on, was the SWR React Hook. Due to the current NextJS server component 
+                    cache invalidation issues, I decided use Vercel's React SWR Hook on client side components to do my fetching. This is the ONLY way I am 
+                    going to do client side reads in the future because its so clear how to use it and gives you soooooo much control over the cache, while 
+                    also able to do optimistic updates. If you are a web developer using React or Next, I highly recommend looking it up.
+                </p>
+                <p>
+                    Future plans, <u>now</u> I'm going to work on the character creator overhaul. I have really big plans for this, so it may take 
+                    some time but it's going to much easier for newer players to use and make characters while being fun for the nerds ❤️.
+                </p>
+                <p>To the Table and Beyond!</p>
+            </div>
+
+            {renderLineBreak()}
+
             <div id="1.0.1" className='tw-mt-4'>
                 <h3>Launch fixes</h3>
                 <p>August 20th, 2023 | Version 1.0.1</p>

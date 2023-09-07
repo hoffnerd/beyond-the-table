@@ -12,16 +12,18 @@ import { useAppContext } from '@/context/AppContext';
 // Components -----------------------------------------------------------------------
 import CharacterCard from '@/components/character/cards/CharacterCard';
 // Hooks ----------------------------------------------------------------------------
+import { useSWRConfig } from 'swr';
 import useMasterInputs from '@/hooks/useMasterInputs';
 // Data -----------------------------------------------------------------------------
 import { characterImageOffset } from '@/data/character';
 // Other ----------------------------------------------------------------------------
 import { callAPI, fireSwal, isObj } from '@/util';
+import { processCharacterImage } from '@/util/character';
 
 //______________________________________________________________________________________
 // ===== Component =====
 
-const ImagePlacement = ({ character }) => {
+const ImagePlacement = ({ character, runMutation }) => {
 
     //______________________________________________________________________________________
     // ===== State from AppContext =====
@@ -34,6 +36,7 @@ const ImagePlacement = ({ character }) => {
 
     //______________________________________________________________________________________
     // ===== Component Hooks =====
+    const { mutate: globalMutate } = useSWRConfig();
     const { renderInputsSection, dynamicInputState } = useMasterInputs(true, characterImageOffset, 
         isObj(character, ["image"]) ? { 
             zoom: character.image.zoom ? character.image.zoom : "",
@@ -57,9 +60,18 @@ const ImagePlacement = ({ character }) => {
     // ===== Handler Functions =====
     const handleSave = async () => {
 
-        const { done, message } = await callAPI({  url:"character/image", method: "POST" }, { characterId: character.id, selectedImage, ...dynamicInputState });
+        const processedCharacter = processCharacterImage(character, { selectedImage, ...dynamicInputState })
+
+        const { error, message } = await runMutation("update", { character: processedCharacter });
         
-        if(done){
+        if(!error){
+            
+            if(isObj(character, [ "visibility" ]) && character.visibility === "PUBLIC"){
+                // clear the cache of the call used on the characters page
+                await globalMutate(`/api/characters`, undefined);
+            }
+
+            // redirect to new character
             fireSwal({ icon: "success", text: "Successfully uploaded Image!" });
             setRedirectTo(`/characters/${character.id}`);
         } else {

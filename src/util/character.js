@@ -55,7 +55,7 @@ export const calculateModifierNumber = (abilityScore) => {
 /**
  * The function calculates proficiency based on a given level.
  * @param level - int, level of character, it is a number between 0 and 20.
- * @returns int, represents the proficiency bounus of character
+ * @returns int, represents the proficiency bonus of character
  */
 export const calculateProficiency = (level) => {
     const levelToUse = level < 0 ? 0 : level > 20 ? 20 : level;
@@ -93,6 +93,77 @@ export const isCharacterVisible = (character, session) => {
     if( character.visibility === "INTERNAL" && isCharactersOwner(character, session) ) return true;
     if( session && session.user && session.user.email && session.user.email === "ADMIN" ) return true;
     return false;
+}
+
+/**
+ * Takes in input states for base data, abilities, and a quote, and returns a processed data object ready for database storage.
+ * @param [characterId=null] - unique identifier for the character. It is optional and can be set to null if no characterId is available and will be created when sent to the DB.
+ * @param baseDataInputState - object that contains the base data for a character. It may include properties such as visibility, name, speed, classes, etc.
+ * @param abilitiesInputState - object representing the abilities input state. It contains key-value pairs where the key is the ability name and the value is the ability score.
+ * @param quoteInputState - object that contains the quote input state. It may have properties such as "quote" or "author".
+ * @returns object named "data" which is a processed data object ready for database storage.
+ */
+export const processCharacter = (characterId=null, baseDataInputState, abilitiesInputState, quoteInputState) => {
+    
+    // key arrays
+    const baseDataInputStateKeys = Object.keys(baseDataInputState);
+    const abilitiesInputStateKeys = Object.keys(abilitiesInputState);
+
+    // variables needed 
+    let shallowCopyOfBaseData = {...baseDataInputState, ...quoteInputState};
+    let data = { 
+        id: characterId,
+        visibility: baseDataInputState.visibility,
+        name: baseDataInputState.name,
+    };
+    let abilities = {};
+
+    // get baseData ready for DB
+    baseDataInputStateKeys.forEach((key) => {
+        switch (key) {
+            case "speed":
+                shallowCopyOfBaseData.speeds = { walking: baseDataInputState.speed };
+                break;
+            case "classes":
+                shallowCopyOfBaseData.classes = [ baseDataInputState.classes ];
+                break;
+            default:
+                break;
+        }
+
+        if(key === "visibility" || key === "name" || key === "speed"){
+            delete shallowCopyOfBaseData[key];
+        }
+    })
+
+    // get abilities ready for DB
+    abilitiesInputStateKeys.forEach((key) => {
+        abilities[key] = { score: abilitiesInputState[key] }
+    })
+
+    // add to data
+    data.baseData = shallowCopyOfBaseData;
+    data.abilities = abilities;
+
+    // return
+    return data;
+}
+
+export const processCharacterImage = (character, imageData) => {
+    
+    // deconstruct imageData passed in
+    const { selectedImage, zoom, x, y } = imageData;
+
+    // set up our image obj to add to the character
+    const image = {
+        filename: selectedImage ? selectedImage : undefined,
+        zoom: zoom ? zoom : undefined,
+        x: x ? x : undefined,
+        y: y ? y : undefined,
+    }
+
+    // return processed character with the image added
+    return { ...character, image };
 }
 
 /**
