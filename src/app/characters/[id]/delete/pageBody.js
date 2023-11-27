@@ -1,36 +1,34 @@
 "use client";
 
 // React/Next -----------------------------------------------------------------------
-import { Fragment, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { useSWRConfig } from 'swr';
 // Styles ---------------------------------------------------------------------------
 // Hooks ----------------------------------------------------------------------------
 import useRedirect from '@/hooks/useRedirect';
+import useMasterInputs from '@/hooks/useMasterInputs';
+import useSWRFetch from '@/hooks/useSWRFetch';
 // Components -----------------------------------------------------------------------
 import Loading from '@/components/layout/Loading';
-import NoCharacter from '@/components/character/NoCharacter';
-import CharacterCard from '@/components/character/cards/CharacterCard';
+import CharacterPageBody from '../pageBody';
 // Other ----------------------------------------------------------------------------
-import { callAPI, fireSwal, isObj } from '@/util';
+import { fireSwal, isObj } from '@/util';
 import { isCharactersOwner } from '@/util/character';
-import useSWRFetch from '@/hooks/useSWRFetch';
-import { useSWRConfig } from 'swr';
-import useMasterInputs from '@/hooks/useMasterInputs';
 
 
 
 //______________________________________________________________________________________
 // ===== Component =====
 
-/* This is the character page of the site */
-const PageBody = ({id}) => {
+/* This is the deletion character page */
+const PageBody = ({id, loadingCardComponent, noCharacterComponent}) => {
 
     //______________________________________________________________________________________
     // ===== Constants =====
-    const dataStructure = [ { key:"nameToDelete", display: "Delete", type: "text" } ];
     const SWROptions = { revalidateIfStale: false, revalidateOnFocus: false };
-    const options = { dataType: "object" };
-    
+    const options = { dataType: "object", pathDelete: "character" };
+
 
 
     //______________________________________________________________________________________
@@ -41,7 +39,7 @@ const PageBody = ({id}) => {
     
     //______________________________________________________________________________________
     // ===== Component State =====
-    const [isSaving, setIsSaving] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
 
 
 
@@ -49,8 +47,8 @@ const PageBody = ({id}) => {
     // ===== Hooks =====
     const [ setRedirect ] = useRedirect();
     const { mutate: globalMutate } = useSWRConfig();
-    const { isLoading, error, data: character } = useSWRFetch(`character?id=${id}`, SWROptions, null, options);
-    const { renderInputsSection, dynamicInputState } = useMasterInputs(true, dataStructure);
+    const { renderInputsSection, dynamicInputState } = useMasterInputs(true, [ { key:"deleteConfirmation", display: "Delete", type: "text" } ]);
+    const { isLoading, error, data: character, runMutation } = useSWRFetch(`character?id=${id}`, SWROptions, null, options);
 
 
 
@@ -63,91 +61,68 @@ const PageBody = ({id}) => {
     }, [status, session, character])
 
     useEffect(() => {
-        if(isSaving) handleSave();
-    }, [isSaving])
+        if(!isDeleting) return;
+        handleSave();
+    }, [isDeleting])
     
-
 
 
     //______________________________________________________________________________________
     // ===== Functions Used Only Within useEffects =====
 
     const handleSave = async () => {
-        const characterId = isObj(character, ["id" ]) ? character.id : null;
-        const { done, message } = await callAPI( { url: `character?id=${characterId}`, method: "DELETE" } );
+        // const { done, message } = await fetcher( `character`, { method:"DELETE" }, { id } );
+        const {error, message } = await runMutation("delete", { id:character.id });
 
-        if(done){
-
-            // clear the cache of the call used on the dashboard so deleted character no longer appears
-            await globalMutate(`/api/auth/characters`, undefined);
-
-            // clear the cache of the call for the single character since we deleted it
-            await globalMutate(`/api/character?id=${character.id}`, undefined);
-            
-            if(isObj(character, [ "visibility" ]) && character.visibility === "PUBLIC"){
-                // clear the cache of the call used on the characters page so deleted character no longer appears
-                await globalMutate(`/api/characters`, undefined);
-            }
-
-            // success
-            fireSwal({ icon: "success", text: message ? message : "Success!" });
-            setRedirect('/dashboard');
-        } else {
-            // error
-            fireSwal({ icon: "error", text: message ? message : "Something went wrong." })
-            setIsSaving(false);
+        // return early with a swal if theres an error
+        if(error) {
+            setIsDeleting(false);
+            return fireSwal({ icon: "error", text: message ? message : "Something went wrong!" })
         }
+
+        // clear the cache of the call for the dashboard
+        await globalMutate(`/api/auth/characters`, undefined);
+
+        // clear the cache of the call for the single character since we deleted it
+        await globalMutate(`/api/character?id=${character.id}`, undefined);
+        
+        // clear the cache of the call used on the characters page so deleted character no longer appears
+        if(isObj(character, [ "visibility" ]) && character.visibility === "PUBLIC") await globalMutate(`/api/characters`, undefined);
+
+        // success
+        fireSwal({ icon: "success", text: message ? message : "Success!" });
+        setRedirect('/dashboard');
     }
-    
-
-    //______________________________________________________________________________________
-    // ===== Conditional Functions =====
-
-    const inputStateMatchescharacterName = () => {
-        return isObj(character, [ "name" ]) && isObj(dynamicInputState, [ "nameToDelete" ]) && dynamicInputState.nameToDelete === character.name;
-    }
-    
 
 
-    //______________________________________________________________________________________
-    // ===== Render Functions =====
-
-    const renderMatchingText = () => {
-        if( !isObj(dynamicInputState, [ "nameToDelete" ]) ) return;
-        return <span> {character.name} <strong>{inputStateMatchescharacterName() ? "=" : "≠"}</strong> {isObj(dynamicInputState, [ "nameToDelete" ]) ? dynamicInputState.nameToDelete : ""}</span>
-    }
 
     //______________________________________________________________________________________
     // ===== Component Return =====
-    if (status === "loading" || isLoading) return <Loading center={true} />;
-    if (error || !isObj(character, ["id"])) return <NoCharacter/>;
-    return (
-        <Fragment>
-            <div className="row justify-content-center">
-                <div className="col-md-6 alert alert-danger tw-text-center">
-                    <h3>Are You Sure?</h3>
-                    <p>Deleting this character is irreversible! Please type the character's name below and click delete to confirm this is what you want. Case Sensitive!</p>
+    if (status === "loading" || isLoading) return <Loading center={true} centerScreen={true} />;
+    if (error || !isObj(character, ["id"])) return noCharacterComponent;
+    return <>
+        <div className="row justify-content-center">
+            <div className="col-md-6 alert alert-danger tw-text-center">
+                <h3>Are You Sure?</h3>
+                <p>Deleting this character is irreversible! Please type "DELETE" below and click delete to confirm this is what you want.</p>
 
-                    {renderInputsSection()}
-        
-                    {renderMatchingText()}
-                    
-                    <div className="d-grid gap-2" style={{textAlign: 'center'}}>
-                        <button
-                            type="button"
-                            className={`btn btn-${isSaving ? "outline-" : ""}danger`}
-                            style={{marginBottom: "10px", marginTop: "15px"}}
-                            onClick={() => { setIsSaving(true) }}
-                            disabled={isSaving || (!inputStateMatchescharacterName())}
-                        >
-                            {isSaving ? "...Deleting Character..." : "Delete Character"}
-                        </button>
-                    </div>
+                {renderInputsSection()}
+                
+                <div className="d-grid gap-2" style={{textAlign: 'center'}}>
+                    <button
+                        type="button"
+                        className={`btn btn-${isDeleting ? "outline-" : ""}danger`}
+                        style={{marginBottom: "10px", marginTop: "15px"}}
+                        onClick={() => { setIsDeleting(true) }}
+                        disabled={isDeleting || (!isObj(dynamicInputState, [ "deleteConfirmation" ])) || dynamicInputState.deleteConfirmation.toLowerCase() !== "delete"}
+                    >
+                        {isDeleting ? "...Deleting Character..." : "Delete Character"}
+                    </button>
                 </div>
             </div>
-            <br/>
-            <CharacterCard character={character} />
-        </Fragment>
-    );
+        </div>
+        <br/>
+        {isDeleting ? <Loading center={true} /> : <CharacterPageBody id={id} loadingCardComponent={loadingCardComponent} noCharacterComponent={noCharacterComponent} /> }
+    </>
 }
 export default PageBody;

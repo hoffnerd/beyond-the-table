@@ -119,7 +119,9 @@
 .characterCard{
     --mainPlateColor: rgb(168 162 158);
     --mainBackgroundColor: rgb(68 64 60);
+    --cardBorder: rgb(250 204 21);
 
+    position: relative;
     overflow: hidden;
     width: 350px;
     height: 500px;
@@ -130,7 +132,7 @@
 	background-size: 400% 200%;
 	animation: gradient 5s ease infinite;
 
-    border-color: rgb(250 204 21);
+    border-color: var(--cardBorder);
     border-width: 8px;
     border-radius: 0.5rem;
 }
@@ -193,6 +195,7 @@
 }
 
 .characterCard .mainPlate .characterImage{
+    position: relative;
     overflow: hidden;
     width: 302px;
     height: 302px;
@@ -202,6 +205,19 @@
     border-top-left-radius: 0.5rem;
     border-top-right-radius: 0.5rem;
     text-shadow: #000000 1px 0px 0px, #000000 0px 1px 0px, #000000 0px -1px 0px, #000000 -1px 0px 0px;
+}
+
+.characterCard .detailsPanel{
+    position: absolute;
+    right: 0px; /* 12px */
+    bottom: 0px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);;
+    font-size: 0.55rem;
+}
+
+.characterCard .detailsPanel a{
+    color: white !important;
 }
 
 .characterCard .mainPlate .infoPanel{
@@ -249,12 +265,21 @@
     font-size: 1.5rem;
     background-color: rgba(0,0,0,0.2);
 }
+.characterCard .abilitiesPlate .abilityPanel .score.proficient,
+.characterCard .abilitiesPlate .abilityPanel .modifier.proficient,
+.characterCard .skills .skillWrapper .skillPlate.proficient{
+    border-color: var(--cardBorder);
+}
 
 .characterCard  .abilitiesPlate .abilityPanel .score{
     border-width: 2px;
     border-radius: 9999px;
     background-color:  var(--mainBackgroundColor);
     border-color: var(--mainPlateColor);
+}
+
+.characterCard  .abilitiesPlate .abilityPanel .score.proficient{
+    border-color: var(--cardBorder);
 }
 
 .characterCard .textPlate{
@@ -318,4 +343,28 @@
 	100% {
 		background-position: 0% 50%;
 	}
+}
+
+
+.characterCard .skills{
+    /* text-align: center; */
+    font-size: 0.73rem;
+    font-weight: bold;
+    text-shadow: #000000 1px 0px 0px, #000000 0px 1px 0px, #000000 0px -1px 0px, #000000 -1px 0px 0px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.characterCard .skills .skillWrapper{
+    padding-top: 5px;
+}
+.characterCard .skills .skillWrapper .skillPlate{
+    border-width: 2px;
+    border-radius: 0.5rem;
+    border-color: var(--mainPlateColor);
+    background-color: rgba(0,0,0,0.2);
+}
+.characterCard .skills .skillWrapper .skillGrid{
+    display: grid;
+    grid-template-columns: 0.1fr 1fr 0.5fr;
+    gap: 1rem;
 }

@@ -1,21 +1,21 @@
 "use client";
 
 // React/Next -----------------------------------------------------------------------
-import { Fragment, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 // Styles ---------------------------------------------------------------------------
+import styles from '@/styles/pages/Character.module.css'
+// Contexts -------------------------------------------------------------------------
+import { useAppContext } from '@/context/AppContext';
 // Hooks ----------------------------------------------------------------------------
 import useRedirect from '@/hooks/useRedirect';
 import useSWRFetch from '@/hooks/useSWRFetch';
 // Components -----------------------------------------------------------------------
-import LoadingCard from '@/components/character/cards/LoadingCard';
-import NoCharacter from '@/components/character/NoCharacter';
 import CharacterCard from '@/components/character/cards/CharacterCard';
 // Other ----------------------------------------------------------------------------
 import { isObj } from '@/util';
 import { isCharacterVisible } from '@/util/character';
-// import { LazyLoadImage } from 'react-lazy-load-image-component';
-// import 'react-lazy-load-image-component/src/effects/blur.css';
+import SkillsCard from '@/components/character/cards/SkillsCard';
 
 
 
@@ -23,22 +23,33 @@ import { isCharacterVisible } from '@/util/character';
 // ===== Component =====
 
 /* This is the character page of the site */
-const PageBody = ({id}) => {
+const PageBody = ({id, loadingCardComponent, noCharacterComponent}) => {
 
     //______________________________________________________________________________________
     // ===== Constants =====
     const SWROptions = { revalidateIfStale: false, revalidateOnFocus: false };
     const options = { dataType: "object" };
 
+
+
     //______________________________________________________________________________________
     // ===== State from Auth =====
     const { data: session, status} = useSession();
+
+
+
+    //______________________________________________________________________________________
+    // ===== State from Context =====
+    const { sidebarOpen } = useAppContext();
+
+
 
     //______________________________________________________________________________________
     // ===== Hooks =====
     const [ setRedirect ] = useRedirect();
     const { isLoading, error, data: character } = useSWRFetch(`character?id=${id}`, SWROptions, null, options);
-    // const [ initialized, character ] = useFetch({ url: `character?id=${id}` });
+
+
 
     //______________________________________________________________________________________
     // ===== Use Effects =====
@@ -48,20 +59,35 @@ const PageBody = ({id}) => {
     }, [status, session, character])
     
 
+
+    
+    //______________________________________________________________________________________
+    // ===== Render Functions =====
+
+    const renderCards = () => (
+        <div className={` ${styles.cardSection} ${styles.columns} ${sidebarOpen ? styles.sidebarOpen : styles.sidebarClosed}`}>
+            <div className={styles.spacer} />
+            <CharacterCard character={character} />
+            <SkillsCard character={character} />
+            <div className={styles.spacer} />
+        </div>
+    )
+
+    const renderLoading = () => (
+        <div className={` ${styles.cardSection} ${styles.columns} ${sidebarOpen ? styles.sidebarOpen : styles.sidebarClosed}`}>
+            <div className={styles.spacer} />
+            {loadingCardComponent}
+            {loadingCardComponent}
+            <div className={styles.spacer} />
+        </div>
+    )
+
+
+    
     //______________________________________________________________________________________
     // ===== Component Return =====
-    // return(
-    //     <LazyLoadImage
-    //         alt={"test"}
-    //         src={"/images/jameswebb2022_1.jpg"}
-    //         placeholderSrc={"/images/gwent/campaign.webp"}
-    //         width={1000} 
-    //         height={1000}
-    //         effect="blur"
-    //     />
-    // )
-    if (status === "loading" || isLoading) return <LoadingCard/>;
-    if (error || !isObj(character, ["id"])) return <NoCharacter/>;
-    return <CharacterCard character={character} />;
+    if (status === "loading" || isLoading) return renderLoading();
+    if (error || !isObj(character, ["id"])) return noCharacterComponent;
+    return renderCards();
 }
 export default PageBody;

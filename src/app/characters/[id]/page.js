@@ -3,6 +3,8 @@
 // Components -----------------------------------------------------------------------
 import PageWrapper from '@/components/layout/PageWrapper';
 import PageBody from './pageBody';
+import LoadingCard from '@/components/character/cards/LoadingCard';
+import NoCharacter from '@/components/character/NoCharacter';
 // SeverFunctions -------------------------------------------------------------------
 import { readCharacterByIdFromParams } from '@/lib/character';
 // Other ----------------------------------------------------------------------------
@@ -53,13 +55,21 @@ const Page = async ({params, searchParams }) => {
     //______________________________________________________________________________________
     // ===== Component Return =====
     return (
-        <PageWrapper className="container tw-my-12" showTitleSection={false}>
+        <PageWrapper className="tw-my-12" showTitleSection={false}>
             <br/>
             <br/>
-            <PageBody id={id} />
+            <PageBody 
+                id={id}
+                loadingCardComponent={ <LoadingCard /> }
+                noCharacterComponent={ <NoCharacter className="container" /> }
+            />
             <br/>
-            <div className='alert alert-info'>
-                <strong>Coming Soon! </strong> Eventually this page will also contain skills, player written notes, and maybe even items and spells.
+            <div className='container'>
+                <div className='alert alert-info tw-text-center'>
+                    <strong>NEW!</strong> Added skill proficiency card!
+                    <br/>
+                    <strong>Coming Soon! </strong> Eventually this page will also contain player written notes, maybe even items and spells!
+                </div>
             </div>
         </PageWrapper>
     )

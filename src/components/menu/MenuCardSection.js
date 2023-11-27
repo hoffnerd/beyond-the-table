@@ -22,46 +22,28 @@ const MenuCardSection = ({data, pathSoFar=null, forceColsOneRow = false, largeTi
     //______________________________________________________________________________________
     // ===== Render Functions  =====
 
-    const renderContent = () => {
-        let navArray = [];
-        if(isArray(data)){
-            data.forEach((obj, index) => {
-                if(obj.doNotShow || obj.onlyShowInNav){
-                    // Do nothing because we should not show this here
-                }
-                else{
-                    navArray.push( 
-                        <MenuCard 
-                            key={index} 
-                            id={obj.id} 
-                            link={valueReturnHelper(obj.link)}
-                            display={valueReturnHelper(obj.display)}
-                            description={valueReturnHelper(obj.description)}
-                            frontImage={valueReturnHelper(obj.frontImage)}
-                            backImage={valueReturnHelper(obj.backImage)}
-                            columnSizes={columnSizes ? columnSizes : valueReturnHelper(obj.columnSizes, "isObj")}
-                            disabledReason={valueReturnHelper(obj.disabledReason)}
-                            largeTitle={largeTitle}
-                            pathSoFar={pathSoFar}
-                        /> 
-                    )
-                }
-            });
-        }
-        return navArray;
-    }
+    const renderContent = () => data.map((obj, index) => {
+        if(obj.doNotShow || obj.onlyShowInNav) return;
+        return <MenuCard 
+            key={index} 
+            id={obj.id} 
+            link={valueReturnHelper(obj.link)}
+            display={valueReturnHelper(obj.display)}
+            description={valueReturnHelper(obj.description)}
+            frontImage={valueReturnHelper(obj.frontImage)}
+            backImage={valueReturnHelper(obj.backImage)}
+            columnSizes={columnSizes ? columnSizes : valueReturnHelper(obj.columnSizes, "isObj")}
+            disabledReason={valueReturnHelper(obj.disabledReason)}
+            largeTitle={largeTitle}
+            pathSoFar={pathSoFar}
+        /> 
+    });
 
     //______________________________________________________________________________________
     // ===== Component Return =====
 
-    if(isArray(data)){
-        return(
-            <div className="row">
-                {renderContent()}
-            </div>
-        )
-    }
-    console.warn("No navagation data given to MenuCardSection:", data)
-    return <div></div>
+    if(!isArray(data)) return;
+
+    return <div className="row"> {renderContent()} </div>
 }
 export default MenuCardSection;

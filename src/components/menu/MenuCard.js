@@ -1,11 +1,9 @@
 // React/Next -----------------------------------------------------------------------
-import { Fragment } from 'react';
-import Image from 'next/image'
 import Link from 'next/link'
 // Components -----------------------------------------------------------------------
+import LazyLoadNextImage from '../LazyLoadNextImage';
 // Other ----------------------------------------------------------------------------
 import {handleColumnSizes} from '@/util'
-import LazyLoadNextImage from '../LazyLoadNextImage';
 
 
 
@@ -33,38 +31,32 @@ const MenuCard = ({id, link, display, description, frontImage, backImage="menu_n
 
     //______________________________________________________________________________________
     // ===== Component Return =====
-    if(id === "empty"){
-        return <div className={`menu-col ${handleColumnSizes(columnSizes)}`}></div>
-    }
-    if(id && display && frontImage){
-        return (
-            <div className={`menu-col ${handleColumnSizes(columnSizes)}`}>
-                <Link href={disabledReason ? "#" : link ? `/${link}` : pathSoFar ? `${pathSoFar}/${id}` : `/${id}`} className="menu-card">
-                    <div className="menu-card-image-grid">
-                        <div className={`menu-card-image menu-card-image-grid__side ${disabledReason ? `menu-card-image-grid__side--${disabledReason}` : "menu-card-image-grid__side--front"}`}>
-                            <LazyLoadNextImage alt={display} imageKey={frontImage} />
-                        </div>
-                        <div className={`menu-card-image menu-card-image-grid__side ${disabledReason ? `menu-card-image-grid__side--${disabledReason}` : "menu-card-image-grid__side--back"}`}>
-                            {renderBackImage()}
-                        </div>
+    if(id === "empty") return <div className={`menu-col ${handleColumnSizes(columnSizes)}`}></div>
+    if(id && display && frontImage) return (
+        <div className={`menu-col ${handleColumnSizes(columnSizes)}`}>
+            <Link href={disabledReason ? "#" : link ? `/${link}` : pathSoFar ? `${pathSoFar}/${id}` : `/${id}`} className="menu-card">
+                <div className="menu-card-image-grid">
+                    <div className={`menu-card-image menu-card-image-grid__side ${disabledReason ? `menu-card-image-grid__side--${disabledReason}` : "menu-card-image-grid__side--front"}`}>
+                        <LazyLoadNextImage alt={display} imageKey={frontImage} />
                     </div>
-                    <div className={`menu-card-title ${disabledReason ? disabledReason : "active"} ${largeTitle ? "text-large" : ""}`}>
-                        <span className={`menu-card-title-text ${disabledReason ? disabledReason : ""} ${largeTitle ? "text-large" : ""}`}>{display}</span>
-                        {disabledReason && 
-                            <Fragment>
-                                <br/>
-                                <span className={"menu-card-title-text future_subtext"}>{disabledReason === "future" ? "Future Content!" : "Coming Soon!"}</span>
-                            </Fragment>
-                        }
+                    <div className={`menu-card-image menu-card-image-grid__side ${disabledReason ? `menu-card-image-grid__side--${disabledReason}` : "menu-card-image-grid__side--back"}`}>
+                        {renderBackImage()}
                     </div>
-                    <div className="menu-card-content">
-                        <span className="menu-card-content-text">{description}</span>
-                    </div>
-                </Link>
-            </div>
-        )
-    }
+                </div>
+                <div className={`menu-card-title ${disabledReason ? disabledReason : "active"} ${largeTitle ? "text-large" : ""}`}>
+                    <span className={`menu-card-title-text ${disabledReason ? disabledReason : ""} ${largeTitle ? "text-large" : ""}`}>{display}</span>
+                    {disabledReason && <>
+                        <br/>
+                        <span className={"menu-card-title-text future_subtext"}>{disabledReason === "future" ? "Future Content!" : "Coming Soon!"}</span>
+                    </>}
+                </div>
+                <div className="menu-card-content">
+                    <span className="menu-card-content-text">{description}</span>
+                </div>
+            </Link>
+        </div>
+    )
     console.warn("Props passed to MenuCard maybe incorrect:", {id, display, description, frontImage, backImage, columnSizes, disabledReason, largeTitle, pathSoFar})
-    return <Fragment></Fragment>
+    return;
 }
 export default MenuCard;

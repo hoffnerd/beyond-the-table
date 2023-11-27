@@ -1,8 +1,9 @@
 // React/Next -----------------------------------------------------------------------
-import { redirect } from 'next/navigation';
 // Components -----------------------------------------------------------------------
 import PageWrapper from '@/components/layout/PageWrapper';
 import PageBody from './pageBody';
+import Loading from '@/components/layout/Loading';
+import NoCharacter from '@/components/character/NoCharacter';
 // SeverFunctions -------------------------------------------------------------------
 import { pageProtector } from '@/lib/protector';
 import { readCharacterByIdFromParams } from '@/lib/character';
@@ -39,7 +40,7 @@ export async function generateMetadata({ params }){
     if ( !isObj(character, [ 'name' ]) ) return config.metadataDefault;
     return {
         title: `Delete ${character.name} | Beyond the Table`,
-        description: `Delete ${character.name}!`
+        description: `Delete the data or information of ${character.name}!`
     }
 }
 
@@ -63,13 +64,17 @@ const Page = async ({params, searchParams }) => {
     };
 
     const session = await pageProtector({ ...config, redirectDestination });
-
+     
 
     //______________________________________________________________________________________
     // ===== Component Return =====
     return (
         <PageWrapper className="container tw-my-12" title={config.title}>
-            <PageBody id={id} />
+            <PageBody 
+                id={id}
+                loadingComponent={ <Loading center={true} /> }
+                noCharacterComponent={ <NoCharacter/> }
+            />
         </PageWrapper>
     )
 }

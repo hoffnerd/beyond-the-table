@@ -26,6 +26,7 @@ export const AppContextProvider = ({children}) => {
     //______________________________________________________________________________________
     // ===== Provider State =====
     const [sidebarOpen, setSidebarOpen] = useState(true);
+    const [activeSidebarAction, setActiveSidebarAction] = useState("origin");
     const [selectedImage, setSelectedImage] = useState("");
     const [revalidateUserUploads, setRevalidateUserUploads] = useState(false);
 
@@ -35,6 +36,7 @@ export const AppContextProvider = ({children}) => {
     // ===== State and Sets that other Components can access =====
     const values = {
         sidebarOpen, setSidebarOpen,
+        activeSidebarAction, setActiveSidebarAction,
         selectedImage, setSelectedImage,
         revalidateUserUploads, setRevalidateUserUploads,
     };

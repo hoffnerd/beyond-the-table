@@ -1,23 +1,4 @@
-// React/Next -----------------------------------------------------------------------
-// Styles ---------------------------------------------------------------------------
-// Components -----------------------------------------------------------------------
-import Sidebar from '@/components/character/Sidebar';
-// Other ----------------------------------------------------------------------------
+import CharacterSidebarLayout from '@/components/layout/CharacterSidebarLayout';
 
-
-//______________________________________________________________________________________
-// ===== Component =====
-
-/* This is the character layout */
-const Layout = async ({ children }) => {
-
-    //______________________________________________________________________________________
-    // ===== Component Return =====
-    return (
-        <div className="tw-flex">
-            <Sidebar />
-            {children}
-        </div>
-    )
-}
+const Layout = ({ children }) => <CharacterSidebarLayout>{children}</CharacterSidebarLayout>;
 export default Layout;

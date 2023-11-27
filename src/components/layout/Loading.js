@@ -1,4 +1,3 @@
-import { Fragment } from "react";
 import styles from "@/styles/components/Loading.module.css";
 
 /**
@@ -9,27 +8,21 @@ const Loading = ({style="bars", color=null, center=false, centerScreen=false}) =
 
     const renderLoader = (style) => {
         if (style === "bars") {
-            return (
-                <Fragment>
-                    <div className={`${styles.bar1} ${color && styles[color] ? styles[color] : ""}`} />
-                    <div className={`${styles.bar2} ${color && styles[color] ? styles[color] : ""}`} />
-                    <div className={`${styles.bar3} ${color && styles[color] ? styles[color] : ""}`} />
-                </Fragment>
-            );
+            return <>
+                <div className={`${styles.bar1} ${color && styles[color] ? styles[color] : ""}`} />
+                <div className={`${styles.bar2} ${color && styles[color] ? styles[color] : ""}`} />
+                <div className={`${styles.bar3} ${color && styles[color] ? styles[color] : ""}`} />
+            </>
         } else if (style === "quarter-spinner") {
-            return (
-                <div className="tw-relative">
-                    <div className={`${styles.quarterSpinner} ${color && styles[color] ? styles[color] : ""}`} />
-                </div>
-            );
+            return <div className="tw-relative">
+                <div className={`${styles.quarterSpinner} ${color && styles[color] ? styles[color] : ""}`} />
+            </div>
         } else if (style === "dots") {
-            return (
-                <Fragment>
-                    <div className={`${styles.dot1} ${color && styles[color] ? styles[color] : ""}`} />
-                    <div className={`${styles.dot2} ${color && styles[color] ? styles[color] : ""}`} />
-                    <div className={`${styles.dot3} ${color && styles[color] ? styles[color] : ""}`} />
-                </Fragment>
-            );
+            return <>
+                <div className={`${styles.dot1} ${color && styles[color] ? styles[color] : ""}`} />
+                <div className={`${styles.dot2} ${color && styles[color] ? styles[color] : ""}`} />
+                <div className={`${styles.dot3} ${color && styles[color] ? styles[color] : ""}`} />
+            </>
         }
     };
 

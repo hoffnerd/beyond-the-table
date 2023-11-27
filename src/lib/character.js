@@ -35,6 +35,8 @@ export const createCharacter = async (data) => {
             name: data.name,
             baseData: data.baseData,
             abilities: data.abilities,
+            image: data.image,
+            skills: data.skills
         }
     });
     return character;
@@ -47,6 +49,8 @@ export const updateCharacter = async (id, data) => {
             name: data.name,
             baseData: data.baseData,
             abilities: data.abilities,
+            image: data.image,
+            skills: data.skills,
             updatedAt: new Date(),
         }
     });

@@ -8,9 +8,7 @@ import { useSession } from 'next-auth/react';
 // Hooks ----------------------------------------------------------------------------
 import useSWRFetch from '@/hooks/useSWRFetch';
 // Components -----------------------------------------------------------------------
-import Loading from '@/components/layout/Loading';
-import NoCharacter from '@/components/character/NoCharacter';
-import ModifyForm from '@/components/character/ModifyForm';
+import Creator from '@/components/character/Creator';
 // Other ----------------------------------------------------------------------------
 import { isObj } from '@/util';
 import { isCharactersOwner } from '@/util/character';
@@ -21,7 +19,7 @@ import { isCharactersOwner } from '@/util/character';
 // ===== Component =====
 
 /* This is the character page of the site */
-const PageBody = ({id}) => {
+const PageBody = ({ id, loadingComponent, noCharacterComponent }) => {
 
     //______________________________________________________________________________________
     // ===== Constants =====
@@ -46,8 +44,8 @@ const PageBody = ({id}) => {
 
     //______________________________________________________________________________________
     // ===== Component Return =====
-    if (status === "loading" || isLoading) return <Loading center={true} />;
-    if (error || !isObj(character, ["id"])) return <NoCharacter/>;
-    return <ModifyForm character={character} type={"update"} runMutation={runMutation} />;
+    if (status === "loading" || isLoading) return loadingComponent;
+    if (error || !isObj(character, ["id"])) return noCharacterComponent;
+    return <Creator character={character} runMutation={runMutation} />;
 }
 export default PageBody;

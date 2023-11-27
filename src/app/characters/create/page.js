@@ -1,9 +1,8 @@
 // React/Next -----------------------------------------------------------------------
 // Styles ---------------------------------------------------------------------------
-import styles from '@/styles/components/CharacterCard.module.css'
 // Components -----------------------------------------------------------------------
 import PageWrapper from '@/components/layout/PageWrapper';
-import ModifyForm from '@/components/character/ModifyForm';
+import Creator from '@/components/character/Creator';
 // Other ----------------------------------------------------------------------------
 import { pageProtector } from '@/lib/protector';
 
@@ -42,8 +41,8 @@ const Page = async () => {
     //______________________________________________________________________________________
     // ===== Component Return =====
     return (
-        <PageWrapper className="container tw-my-12" title={config.title}>
-            <ModifyForm />
+        <PageWrapper className="container tw-my-12" showTitleSection={false}>
+            <Creator />
         </PageWrapper>
     )
 }

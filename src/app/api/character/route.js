@@ -5,18 +5,28 @@ import { readCharacterById, createCharacter, updateCharacter, deleteCharacter } 
 // Data --------------------------------------------------------------
 // Util --------------------------------------------------------------
 import { apiProtector, readServerSession } from '@/lib/protector';
-import { isObj } from '@/util';
+import { isArray, isObj } from '@/util';
 import { isCharacterVisible } from '@/util/character';
 
 
 
 //______________________________________________________________________________________
-// ===== Conditional Functions =====
+// ===== Helper Functions =====
+
+const characterInvalidError = (message="Something has gone wrong!") => [ false, [ false, message ] ];
 
 const characterValid = (character) => {
-    return isObj(character, [ "visibility", "name" ]) && isObj(character.baseData, [ "level", "hitpoints", "armor", "race", "classes", "speeds" ]) && isObj(character.abilities);
-}
 
+    if(!isObj(character, [ "baseData" ])) return characterInvalidError();
+
+    if(!isArray(character.baseData.classes)) return characterInvalidError(`Please add a class to your character! You can find this in the "Class" section.`);
+    if(!character.baseData.hitpoints) return characterInvalidError(`Please make sure character has hit points! You can find this in the "Everything Else" section.`);
+
+    if(!character.visibility) return characterInvalidError(`Please select a visibility option for your character! You can find this in the "Everything Else" section.`);
+    if(!character.name) return characterInvalidError(`Please name your character! You can find this in the "Everything Else" section.`);
+
+    return [ true, [ true, "This character is valid.", character ] ];
+}
 
 
 //______________________________________________________________________________________
@@ -44,17 +54,25 @@ export async function POST(request) {
 
     // Extract Data from Request
     const { character } = await request.json();
-    if(!(characterValid(character))) return NextResponse.json([false, "Missing character data!", character ]);
 
     // Protection
     const { authorized, message, session} = await apiProtector({ requiredRole: "USER" });
-    if( !authorized ) return NextResponse.json([false, message ? message : "Unauthorized!", authorized ]);
+    if( !authorized ) return NextResponse.json([ false, message ? message : "Unauthorized!", {authorized} ]);
 
-    // Use Prisma to create the data in the DB
-    const newCharacter = await createCharacter({ ...character, userEmail: session.user.email });
+    // validate character
+    const [ valid, response ] = characterValid(character);
+    if(!valid) return NextResponse.json(response);
 
-    // API Return
-    return NextResponse.json([true, "Success!", newCharacter]);
+    // try to create a new character
+    try {
+        // Use Prisma to create the data in the DB
+        const newCharacter = await createCharacter({ ...character, userEmail: session.user.email });
+
+        // API Return
+        return NextResponse.json([ true, "Success!", newCharacter ]);
+    } catch ({name, message}) {
+        return NextResponse.json([ false, message, { error: true, message } ]);
+    }
 }
 
 
@@ -66,19 +84,26 @@ export async function PUT(request) {
 
     // Extract Data from Request
     const { character } = await request.json();
-    if(!(characterValid(character))) return NextResponse.json([false, "Missing character data!", character ]);
-    if(!character.id){ return NextResponse.json([false, "Missing Character Id!", character ]) };
+    console.log( "character", character )
 
     // Protection
     const { authorized, message, session} = await apiProtector({ requiredRole: "USER" });
     if( !authorized ) return NextResponse.json([false, message ? message : "Unauthorized!", authorized]);
 
+    // Double check this character has an Id
+    if(!character.id) return NextResponse.json([false, "Missing Character Id!", character ]);
+
     // More Protection
     const characterBeforeUpdate = await readCharacterById(character.id);
     if( !(isObj(characterBeforeUpdate, ["id", "userEmail"]) && characterBeforeUpdate.userEmail === session.user.email) )
         return NextResponse.json([false, "This is not your character!" ])
+
+    // validate character
+    const [ valid, response ] = characterValid(character);
+    if(!valid) return NextResponse.json(response);
+
     
-    // Use Prisma to create the data in the DB
+    // prisma function to update our character in the DB
     const updatedCharacter = await updateCharacter(character.id, character);
 
     // API Return
@@ -94,34 +119,21 @@ export async function PUT(request) {
 
 export async function DELETE(request) {
 
-    //______________________________________________________________________________________
-    // ===== Extract Data from Request =====
+    // Extract Data from Request
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
 
-    
-
-    //______________________________________________________________________________________
-    // ===== Protection =====
-    
+    // Protection
     const { authorized, message, session} = await apiProtector({ requiredRole: "USER" });
-    if( !authorized ) return  NextResponse.json({done: false, authorized, message: message ? message : "Unauthorized!" });
+    if( !authorized ) return  NextResponse.json([false, message ? message : "Unauthorized!" ]);
 
+    // More Protection
     const character = await readCharacterById(id);
-    if( !(isObj(character, ["id", "userEmail"]) && character.userEmail === session.user.email) ){
-        return NextResponse.json({done: false, message: "This is not your character!" });
-    }
-
+    if( !(isObj(character, ["id", "userEmail"]) && character.userEmail === session.user.email) ) return NextResponse.json([false, "This is not your character!" ])
     
-    //______________________________________________________________________________________
-    // ===== Use Prisma to create the data in the DB =====
-
+    // Use Prisma to delete the data in the DB
     const characterDeleted = await deleteCharacter(id);
     
-
-
-    //______________________________________________________________________________________
-    // ===== API Return =====
-
-    return NextResponse.json({done: true, message: `Successfully Deleted ${character.name}!`});
+    // API Return
+    return NextResponse.json([true, `Successfully Deleted ${character.name}!`]);
 }

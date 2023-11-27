@@ -1,4 +1,5 @@
-import { isArray, isObj } from ".";
+import { abilitiesPossible, characterBaseData, characterBaseDataArray, imageKeysPossible, skillsPossible } from "@/data/character";
+import { convertObjToArray, isArray, isObj } from ".";
 
 
 /**
@@ -30,11 +31,10 @@ export const generateAbilityScores = (characterAbilities) => {
 export const calculateModifierNumber = (abilityScore) => {
     const abilityScoreToUse = abilityScore < -10 ? -10 : abilityScore > 30 ? 30 : abilityScore;
     let modifier = 0;
-    let abilityScoreMatcher = 10; 
     
     if(abilityScoreToUse > 10){
         // is incrementing variable by 2 until it matches `abilityScore` passed in
-        abilityScoreMatcher = abilityScoreMatcher + 2;
+        let abilityScoreMatcher = 12;
         while (abilityScoreMatcher <= abilityScoreToUse) {
             abilityScoreMatcher = abilityScoreMatcher + 2;
             modifier++;
@@ -42,7 +42,7 @@ export const calculateModifierNumber = (abilityScore) => {
     }
     else if (abilityScoreToUse < 10){
         // is decremented variable by 2 until it matches `abilityScore` passed in
-        abilityScoreMatcher = abilityScoreMatcher - 2;
+        let abilityScoreMatcher = 9;
         while (abilityScoreMatcher >= abilityScoreToUse) {
             abilityScoreMatcher = abilityScoreMatcher - 2;
             modifier--;
@@ -51,6 +51,20 @@ export const calculateModifierNumber = (abilityScore) => {
 
     return modifier;
 }
+
+/**
+ * Calculates the total level of a character based on an array of classes.
+ * @param classes - array of objects, each object represents a class and may have a `level` property.
+ * @returns int, the total level calculated from the input array of class objects.
+ */
+export const calculateLevel = (classes) => {
+    if (!isArray(classes)) return 0;
+    let level = 0;
+    classes.forEach(classObj => {
+        if(isObj(classObj, ["level"]) && classObj.level > 0) level += classObj.level;
+    });
+    return level;
+} 
 
 /**
  * The function calculates proficiency based on a given level.
@@ -68,6 +82,7 @@ export const calculateProficiency = (level) => {
     pointsToAdd = parseInt(pointsToAdd);
     return proficiencyBase + pointsToAdd;
 } 
+
 
 
 
@@ -149,7 +164,113 @@ export const processCharacter = (characterId=null, baseDataInputState, abilities
     return data;
 }
 
-export const processCharacterImage = (character, imageData) => {
+/**
+ * Processes the data given to create a new character object.
+ * @param [characterId=null] - int, optional parameter that represents the id of the character. 
+ * If a characterId is provided, it will be assigned to the "id" property of the
+ * returned object. If no characterId is provided, the "id" property will be set to undefined.
+ * @param data - object, contains the information about a character
+ * @returns object, the character as if it was gotten from the database
+ */
+export const processCharacter_experimental = (characterId=null, data) => {
+
+    // Objects within a single character
+    let baseData = {}
+    let image = {}
+    let abilities = {}
+    let skills = {}
+
+    // Add any data that needs to be mapped to baseData
+    isArray(characterBaseDataArray) && characterBaseDataArray.forEach(characterBaseDataObj => {
+        if(isObj(data, [ characterBaseDataObj.key ])) 
+            baseData[characterBaseDataObj.key] = characterBaseDataObj.key === "speeds" ? {walking:data[characterBaseDataObj.key]} : data[characterBaseDataObj.key];
+    });
+
+    // Add any data that needs to be mapped to abilities
+    isArray(abilitiesPossible) && abilitiesPossible.forEach(abilityObj => {
+        if(isObj(abilityObj, [ "key" ])) {
+            abilities[abilityObj.key] = { 
+                score: data[abilityObj.key] || data[abilityObj.key] === 0 ? data[abilityObj.key] : 10,
+                modifier: data.modifiers && (data.modifiers[abilityObj.key] || data.modifiers[abilityObj.key] === 0) ? data.modifiers[abilityObj.key] : undefined,
+                proficient: isObj(data.savingThrows, [ abilityObj.key ]) ? true : undefined
+            }
+        }
+    });
+
+    // Add any data that needs to be mapped to image
+    isArray(imageKeysPossible) && isObj(data, [ "main", "back" ], false) && imageKeysPossible.forEach(imageKey => {
+        data.main[imageKey] ? image.main ? image.main = { ...image.main, [imageKey]: data.main[imageKey] } : image.main = { [imageKey]: data.main[imageKey] } : null;
+        data.back[imageKey] ? image.back ? image.back = { ...image.back, [imageKey]: data.back[imageKey] } : image.back = { [imageKey]: data.back[imageKey] } : null;
+    });
+
+    // Add any data that needs to be mapped to skills
+    isArray(skillsPossible) && isObj(data.skills) && skillsPossible.forEach(skillObj => {
+        if(isObj(skillObj, ["key"]) && data.skills[skillObj.key]) skills[skillObj.key] = data.skills[skillObj.key];
+    })
+    
+    // return character
+    return {
+        id: characterId ? characterId : undefined,
+        visibility: data.visibility,
+        name: data.name,
+        image,
+        baseData,
+        abilities,
+        skills
+    };
+}
+
+export const getModifiersOverriding = (modifiers) => {
+    if(!isObj(modifiers)) return [];
+
+    let modifiersOverriding = [];
+    const modifierKeys = Object.keys(modifiers);
+    isArray(modifierKeys) && modifierKeys.forEach(modifierKey => {
+        (modifiers[modifierKey] || modifiers[modifierKey] === 0) && modifiersOverriding.push(modifierKey);
+    });
+    return modifiersOverriding;
+}
+
+export const unprocessCharacter = (character) => {
+
+    // deconstruct our character
+    const { id, visibility, name, baseData, image, abilities, skills } = character;
+    const main = isObj(image, [ "main" ]) ? image.main : null;
+    const back = isObj(image, [ "back" ]) ? image.back : null;
+
+    // data objects for the unprocessed character
+    let data = {}
+    let modifiers = {}
+    let savingThrows = {}
+
+
+    // Add any data that needs to be mapped from baseData
+    isArray(characterBaseDataArray) && characterBaseDataArray.forEach(characterBaseDataObj => {
+        if(isObj(baseData, [ characterBaseDataObj.key ])) 
+            data[characterBaseDataObj.key] = characterBaseDataObj.key === "speeds" ? baseData.speeds.walking : baseData[characterBaseDataObj.key];
+    });
+
+    // Add any data that needs to be mapped from abilities
+    isArray(abilitiesPossible) && abilitiesPossible.forEach(abilityObj => {
+        if(isObj(abilityObj, [ "key" ]) && isObj(abilities, [ abilityObj.key ])) {
+
+            // deconstruct the characters ability object
+            const { score, modifier, proficient } = abilities[abilityObj.key];
+
+            // set what needs to be set if it exists
+            data[abilityObj.key] = score ? score : null;
+            modifiers[abilityObj.key] = modifier ? modifier : null;
+            savingThrows[abilityObj.key] = proficient ? proficient : null;
+        }
+    });
+
+    const unprocessedCharacter = { ...data, id, visibility, name, modifiers, modifiersOverriding:getModifiersOverriding(modifiers), savingThrows, skills, main, back }
+
+    // return unprocessed character
+    return unprocessedCharacter
+}
+
+export const processCharacterImage = (character, imageData) => { // remove
     
     // deconstruct imageData passed in
     const { selectedImage, zoom, x, y } = imageData;

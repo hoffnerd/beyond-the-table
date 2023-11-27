@@ -1,5 +1,4 @@
 // React/Next -----------------------------------------------------------------------
-import { Fragment } from 'react';
 // Styles ---------------------------------------------------------------------------
 import styles from '../../styles/components/PageWrapper.module.css'
 // Components -----------------------------------------------------------------------
@@ -22,33 +21,34 @@ const PageWrapper = ({ children, className=false, title=null, subtitle=null, sho
 
     //______________________________________________________________________________________
     // ===== Component Return =====
+    const renderDefaultTitle = () => <>
+        <h1>Welcome to</h1>
+        <h1>Beyond the Table</h1>
+        <br/>
+    </>
+
+    const renderPropTitle = () => <>
+        <h2>{title}</h2>
+        {subtitle ? <p>{subtitle}</p> : <br/>}
+    </>
+
+    const renderTitleSection = () => <>
+        <div className="container">
+            <div className={`${title ? styles.pagePanel : styles.homePanel}`}>
+                <br/>
+                {title ? renderPropTitle() : renderDefaultTitle() }
+                <br/>
+            </div>
+        </div>
+        <div className="branded-line"></div>
+    </>
+
+
+    //______________________________________________________________________________________
+    // ===== Component Return =====
     return (
         <div style={{width:"100%"}}>
-            {showTitleSection ? 
-                <Fragment>
-                    <div className="container">
-                        <div className={`${title ? styles.pagePanel : styles.homePanel}`}>
-                            {title ? 
-                                <Fragment>
-                                    <br/>
-                                    <h2>{title}</h2>
-                                    {subtitle ? <p>{subtitle}</p> : <br/>}
-                                    <br/>
-                                </Fragment>
-                            :
-                                <Fragment>
-                                    <br/>
-                                    <h1>Welcome to</h1>
-                                    <h1>Beyond the Table</h1>
-                                    <br/>
-                                    <br/>
-                                </Fragment>
-                            }
-                        </div>
-                    </div>
-                    <div className="branded-line"></div>
-                </Fragment>
-            : ""}
+            {showTitleSection && renderTitleSection()}
             <div className={className ? className : ""}>
                 { children }
             </div>

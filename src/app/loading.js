@@ -1,5 +1,4 @@
-import Loading from "@/components/layout/Loading";
+import LoadingSpinner from "@/components/layout/Loading";
 
-export default async function () {
-    return <Loading center={true} centerScreen={true} />;
-}
+const Loading = async () => <LoadingSpinner center={true} centerScreen={true} />;
+export default Loading;

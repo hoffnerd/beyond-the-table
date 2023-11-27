@@ -16,7 +16,7 @@ import { callAPI, fireSwal, isArray, isObj } from "@/util";
  * The Uploader component handles file uploads and displays a success or error message.
  * @returns UploadDropzone component with the specified props.
  */
-const Uploader = ({ referer }) => {
+const Uploader = ({ runMutation }) => {
 
     //______________________________________________________________________________________
     // ===== State from AppContext =====
@@ -36,10 +36,9 @@ const Uploader = ({ referer }) => {
     }
 
     const onClientUploadComplete = (files) => {
-        console.log("Files: ", files);
-        if(!(isArray(files) && isObj(files[0], [ "key" ]))) return;
+        if(!(isArray(files) && isObj(files[0], [ "key" ]))) return console.error("Missing Files in onClientUploadComplete", { files });
 
-        createUploads(files);
+        runMutation("create", { files });
     }
 
     const onUploadError = (error) => {

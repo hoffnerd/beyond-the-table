@@ -1,10 +1,10 @@
 .sidebar {
     transition-duration: 300ms;
     padding-top: 2rem;
-    padding: 1.25rem;
-    background-color: #480000;
+    padding: 0.5rem;
+    background-color: var(--brand);
     position: relative;
-    z-index: 10;
+    z-index: 9999;
 }
 
 .sidebar.open {
@@ -35,6 +35,12 @@
     }
 }
 
+.sidebar .openerCloserContainer{
+    position: sticky;
+    top: 10px;
+    z-index: 9999;
+}
+
 .sidebar .openerCloser {
     font-size: 1.875rem;
     line-height: 2.25rem;
@@ -43,12 +49,14 @@
     border-width: 3px;
     border-radius: 9999px;
     cursor: pointer;
-    right: -1.25rem;
-    top: 2.25rem;
+    right: -2rem;
+    top: 1.1rem;
     position: absolute;
 }
 
 .sidebar .items {
+    position: sticky;
+    top: 10px;
     padding-left: 0px;
     padding-top: 0.5rem;
 }
@@ -66,6 +74,14 @@
     margin-top: 0.5rem;
 }
 
+.sidebar.open .item.tabLevel1{
+    padding-left: 40px;
+}
+
+.sidebar.closed .item.tabLevel1{
+    padding-left: 20px;
+}
+
 .sidebar .activeItem {
     background-color: #3e0000;
 }
@@ -77,6 +93,7 @@
 .sidebar .item .link {
     width: 100%;
     text-decoration-line: none;
+    padding-left: 10px;
 }
 
 .sidebar .item .link .icon {

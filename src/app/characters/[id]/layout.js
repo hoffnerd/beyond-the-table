@@ -1,7 +1,7 @@
 // React/Next -----------------------------------------------------------------------
 // Styles ---------------------------------------------------------------------------
 // Components -----------------------------------------------------------------------
-import Sidebar from '@/components/character/Sidebar';
+import CharacterSidebarLayout from '@/components/layout/CharacterSidebarLayout';
 // SeverFunctions -------------------------------------------------------------------
 import { readCharacterByIdFromParams } from '@/lib/character';
 // Other ----------------------------------------------------------------------------
@@ -19,11 +19,6 @@ const Layout = async ({params, searchParams, children }) => {
 
     //______________________________________________________________________________________
     // ===== Component Return =====
-    return (
-        <div className="tw-flex">
-            <Sidebar character={character} />
-            {children}
-        </div>
-    )
+    return <CharacterSidebarLayout character={character}>{children}</CharacterSidebarLayout>
 }
 export default Layout;
