@@ -1,3 +1,4 @@
 import CharacterSidebarLayout from '@/components/layout/CharacterSidebarLayout';
 
-export default ({ children }) => <CharacterSidebarLayout>{children}</CharacterSidebarLayout>;
+const Layout = ({ children }) => <CharacterSidebarLayout>{children}</CharacterSidebarLayout>;
+export default Layout;
