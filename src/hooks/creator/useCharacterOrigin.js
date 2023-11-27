@@ -143,9 +143,11 @@ const useCharacterOrigin = (unprocessedCharacter=null) => {
         renderForm: () => (<>
             {renderFormSection("Race", raceData, races, selectedRace, setSelectedRace, otherRaceInput.renderInputsSection)}
             {renderSubraceForm()}
-            <br/>
-            <br/>
-            {renderFormSection("Background", backgroundData, backgrounds, selectedBackground, setSelectedBackground, otherBackgroundInput.renderInputsSection)}
+            {/* 
+                <br/>
+                <br/>
+                {renderFormSection("Background", backgroundData, backgrounds, selectedBackground, setSelectedBackground, otherBackgroundInput.renderInputsSection)} 
+            */}
         </>), 
         data: { 
             race: selectedRace,
