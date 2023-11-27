@@ -63,7 +63,7 @@ const useMasterInputs = (readyToRender, dataStructure, dataToFillInputState = nu
 
         if(dataStructure && dataStructure.length > 0){
             dataStructure.map((dataStructureObj, index) => {
-                inputDisplays.push(
+                isObj(dataStructureObj) && inputDisplays.push(
                     <div key={index} className={handleColumnSizes(dataStructureObj.columnSizes)} style={{paddingBottom:"15px"}}>
                         <MasterInputComponent
                             dataStructureObj={dataStructureObj}

@@ -1,0 +1,27 @@
+
+.cardSection{
+    display: grid;
+}
+
+.cardSection.columns{
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 1rem;
+}
+
+@media only screen and (max-width: 1039px){
+    .cardSection.columns.sidebarOpen{
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+    .cardSection.sidebarOpen .spacer{
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 829px){
+    .cardSection.columns.sidebarClosed{
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+    .cardSection.sidebarClosed .spacer{
+        display: none;
+    }
+}

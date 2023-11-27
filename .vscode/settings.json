@@ -18,5 +18,31 @@
         "titleBar.inactiveBackground": "#48000099",
         "titleBar.inactiveForeground": "#e7e7e799"
     },
-    "peacock.color": "#480000"
+    "peacock.color": "#480000",
+    "cSpell.words": [
+        "countercharm",
+        "darkvision",
+        "dragonborn",
+        "Dwarven",
+        "Dwarvish",
+        "Elven",
+        "halfelf",
+        "halfling",
+        "halflings",
+        "halforc",
+        "handaxe",
+        "lightfoot",
+        "Lightfoots",
+        "longsword",
+        "Metamagic",
+        "Multiattack",
+        "quickdraw",
+        "shortbow",
+        "shortsword",
+        "spellcasting",
+        "Stonecunning",
+        "tiefling",
+        "unprocess",
+        "warhammer"
+    ]
 }

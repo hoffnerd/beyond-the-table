@@ -2,14 +2,14 @@
 import { redirect } from 'next/navigation';
 // Components -----------------------------------------------------------------------
 import PageWrapper from '@/components/layout/PageWrapper';
-import ModifyForm from '@/components/character/ModifyForm';
+import PageBody from './pageBody';
+import Loading from '@/components/layout/Loading';
+import NoCharacter from '@/components/character/NoCharacter';
 // SeverFunctions -------------------------------------------------------------------
 import { pageProtector } from '@/lib/protector';
 import { readCharacterByIdFromParams } from '@/lib/character';
 // Other ----------------------------------------------------------------------------
 import { isObj } from '@/util';
-import { isCharactersOwner } from '@/util/character';
-import PageBody from './pageBody';
 
 
 
@@ -72,7 +72,11 @@ const Page = async ({params, searchParams }) => {
     // ===== Component Return =====
     return (
         <PageWrapper className="container tw-my-12" title={config.title}>
-            <PageBody id={id} />
+            <PageBody 
+                id={id}
+                loadingComponent={ <Loading center={true} /> }
+                noCharacterComponent={ <NoCharacter/> }
+            />
         </PageWrapper>
     )
 }

@@ -29,8 +29,15 @@ export const authOptions = {
         //     from: process.env.NEXT_PUBLIC_EMAIL_FROM
         // })
     ],
+    // session:{
+    //     maxAge: 2 * 60,
+    //     updateAge: 2 * 60,
+    // },
     callbacks: {
         async session({ session, token, user }) {
+            // console.log("==================================")
+            // console.log({ session, token, user })
+            // console.log("==================================")
             session.user.email = user.email
             session.user.emailVerified = user.emailVerified
             session.user.image = user.image

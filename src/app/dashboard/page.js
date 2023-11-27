@@ -7,9 +7,8 @@ import styles from '@/styles/components/CharacterCard.module.css'
 import PageWrapper from '@/components/layout/PageWrapper';
 import CharacterCards from '@/components/character/cards/CharacterCards';
 // SeverFunctions -------------------------------------------------------------------
-import { readCharacters } from '@/lib/character';
 // Other ----------------------------------------------------------------------------
-import { isArray, isObj } from '@/util';
+
 
 
 

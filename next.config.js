@@ -4,7 +4,9 @@ const nextConfig = {
     images: {
         remotePatterns: [ { protocol: 'https', hostname: 'uploadthing.com', }, ],
     },
-    async redirects() { return [ { source: '/information', destination: '/information/change-log', permanent: true }, ] }
+    async redirects() { 
+        return [ { source: '/information', destination: '/information/change-log', permanent: true }, ] 
+    }
 }
 
 module.exports = nextConfig

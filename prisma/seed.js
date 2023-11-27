@@ -13,7 +13,7 @@ const character = [
             "race": "goliath",
             "armor": "15",
             "level": "5",
-            "quote": "Me and my sister... we have a past. We almost died at the hands of a witch. But that past made us stronger. We'd gotten a taste of blood. Witch blood. And we haven't stopped since.",
+            "quote": "Me and my sister... we have a past. We almost died at the hands of a witch. That made us stronger. We'd gotten a taste of blood. Witch blood. And we haven't stopped since.",
             "speeds": {
                 "walking": 30
             },

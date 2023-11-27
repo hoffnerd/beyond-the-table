@@ -65,7 +65,7 @@ const images = {
 
 //______________________________________________________________________________________
 // ===== Component =====
-const LazyLoadNextImage = ({imageKey, alt="Image Alt", width=null, height=null, className="" }) => {
+const LazyLoadNextImage = ({imageKey, alt="Image Alt", width=null, height=null, className="", style={} }) => {
 
     //______________________________________________________________________________________
     // ===== Constants =====
@@ -78,7 +78,7 @@ const LazyLoadNextImage = ({imageKey, alt="Image Alt", width=null, height=null, 
     //______________________________________________________________________________________
     // ===== Component Return =====
     if(!(imageKey && isObj(images, [imageKey]))) return <div style={{ width, height }} className={className} title="Image not statically added">{alt}</div>
-    if(width && height) return <Image src={images[imageKey]} alt={alt} width={width} height={height} className={className} placeholder={placeholder} />
+    if(width && height) return <Image src={images[imageKey]} alt={alt} width={width} height={height} className={className} style={{...style}} placeholder={placeholder} />
     return (
         <Image
             fill
@@ -87,6 +87,7 @@ const LazyLoadNextImage = ({imageKey, alt="Image Alt", width=null, height=null, 
             src={images[imageKey]} 
             placeholder={placeholder}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            style={{...style}}
         />
     )
 }

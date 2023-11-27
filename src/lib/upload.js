@@ -9,9 +9,9 @@ export const readUploadsByUser = async (userEmail) => {
     return upload;
 }
 
-export const createUpload = async (userEmail, filename) => {
+export const createUpload = async (userEmail, file) => {
     const upload = await prisma.upload.create({ 
-        data: { userEmail, filename }
+        data: { userEmail, filename: file.key }
     });
     return upload;
 }

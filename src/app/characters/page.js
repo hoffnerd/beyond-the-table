@@ -9,7 +9,6 @@ import CharacterCards from '@/components/character/cards/CharacterCards';
 import { character_subNavigation } from '@/data/navigation';
 // Other ----------------------------------------------------------------------------
 import { isArray } from '@/util';
-import { pageProtector, readServerSession } from '@/lib/protector';
 
 
 

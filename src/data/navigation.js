@@ -1,15 +1,13 @@
 export const information_subNavigation = [
     { 
+        id: "roadmap",
+        display: "Roadmap",
+        onlyShowInNav: true,
+    },
+    { 
         id: "change-log", 
         display: "Change Log",
         onlyShowInNav: true
-    },
-    { 
-        id: "trello", 
-        link: "https://trello.com/b/3BTFQFSi/beyond-the-table", 
-        external: true,
-        display: "Trello Board",
-        onlyShowInNav: true,
     },
 ];
 

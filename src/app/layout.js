@@ -14,8 +14,25 @@ import { AppContextProvider } from '@/context/AppContext';
 import Navbar from '@/components/layout/Navbar';
 // Other ----------------------------------------------------------------------------
 import { config } from "@fortawesome/fontawesome-svg-core";
-import { Fragment } from 'react';
 config.autoAddCss = false;
+
+const forceTailwindDetection = [
+    "tw-grid-cols-2",
+    "tw-grid-cols-3",
+    "tw-grid-cols-5",
+    "tw-grid-cols-7",
+    "tw-grid-cols-9",
+    "tw-gap-4",
+    "tw-gap-4",
+    "tw-m-auto",
+    "tw-my-auto",
+    "tw-col-span-2",
+    "tw-col-span-3",
+    "tw-col-span-4",
+    "tw-col-end-11",
+    "tw-flow-root",
+    "tw-float-right"
+]
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -28,20 +45,18 @@ const RootLayout = async ({ children }) => {
 
     const useGoogleAnalytics = () => {
         if(process.env.NODE_ENV === "development") return;
-        return(
-            <Fragment>
-                <Script src="https://www.googletagmanager.com/gtag/js?id=G-CRCKFBYMMT" />
-                <Script id="google-analytics">
-                    {`
-                        window.dataLayer = window.dataLayer || [];
-                        function gtag(){dataLayer.push(arguments);}
-                        gtag('js', new Date());
-            
-                        gtag('config', 'G-CRCKFBYMMT');
-                    `}
-                </Script>
-            </Fragment>
-        )
+        return <>
+            <Script src="https://www.googletagmanager.com/gtag/js?id=G-CRCKFBYMMT" />
+            <Script id="google-analytics">
+                {`
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+        
+                    gtag('config', 'G-CRCKFBYMMT');
+                `}
+            </Script>
+        </>
     }
 
     return (
@@ -60,7 +75,7 @@ const RootLayout = async ({ children }) => {
                             <span className="text">
                                 If you would like to give feedback, suggest a change, or report a bug, send me an email at <a href="mailto:thetablebeyond@gmail.com">thetablebeyond@gmail.com</a>
                             </span>
-                        </footer>
+                        </footer>    
                     </AppContextProvider>
                 </AuthContext>
             </body>

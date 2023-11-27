@@ -1,0 +1,110 @@
+.dataTable .tableHeaderRow {
+    background-color: var(--brand);
+    color: #ffffff;
+}
+
+/* .tableCell {
+    padding-left: 1rem;
+} */
+
+.dataTable .tableBody tr:nth-child(odd) {
+    background-color: var(--body-bg);
+}
+
+table.dataTable {
+    border: 1px solid var(--body-bg);
+    border-collapse: collapse;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    table-layout: fixed;
+}
+
+table.dataTable tr {
+    background-color: #181a1c;
+    border: 1px solid #ddd;
+    padding: .35em;
+}
+
+table.dataTable th,
+table.dataTable td {
+    padding: .625em;
+    text-align: center;
+}
+
+table.dataTable td {
+    overflow: auto
+}
+
+table.dataTable th {
+    font-size: .85em;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+
+@media screen and (max-width: 991px) {
+    table.dataTable {
+        border: 0;
+    }
+
+    table.dataTable thead {
+        border: none;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+
+    table.dataTable tr {
+        border-bottom: 3px solid #ddd;
+        display: block;
+        margin-bottom: .625em;
+    }
+
+    table.dataTable td {
+        border-bottom: 1px solid #ddd;
+        display: block;
+        font-size: .8em;
+        text-align: right;
+    }
+
+    table.dataTable td::before {
+        /*
+      * aria-label has no advantage, it won't be read inside a table.dataTable
+      content: attr(aria-label);
+      */
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    table.dataTable td:last-child {
+        border-bottom: 0;
+    }
+
+    .noDisplayOnMobile {
+        display: none !important;
+    }
+}
+
+/* Highlight Colors */
+
+.green-highlight {
+    background-color: #87ff8f !important;
+}
+
+.yellow-highlight {
+    background-color: #fff087 !important;
+}
+
+.red-highlight {
+    background-color: #ff8787 !important;
+}
+
+.purple-highlight {
+    background-color: #a89bc8 !important;
+}

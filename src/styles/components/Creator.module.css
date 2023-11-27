@@ -1,0 +1,450 @@
+.creatorGrid{
+    display: grid;
+}
+
+.creatorGrid.columns{
+    grid-template-columns: 1fr 350px;
+}
+
+.creatorGrid.raceButtonColumns{
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.formSection {
+    
+}
+
+.cardSection {
+    position: sticky;
+    top: 10px;
+}
+
+.imageGrid {
+    display: grid;
+    grid-template-columns: repeat(minmax(0, 1fr), minmax(0, 1fr));
+    gap: 1rem;
+    overflow: auto;
+}
+
+.imageContainer {
+    display: flex;
+    justify-content: center;
+}
+
+@media only screen and (max-width: 1180px){
+    .sidebarOpen .creatorGrid.raceButtonColumns{
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media only screen and (max-width: 991px){
+    .sidebarClosed .creatorGrid.raceButtonColumns{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media only screen and (max-width: 1064px){
+    .sidebarOpen .creatorGrid.raceButtonColumns{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media only screen and (max-width: 1028px){
+    .sidebarOpen .creatorGrid.raceButtonColumns{
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .creatorGrid.columns.sidebarOpen {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+
+    .sidebarOpen .formSection {
+        order: 2;
+    }
+
+    .sidebarOpen .cardSection {
+        position: relative;
+        top: 0px;
+        order: 1;
+    }
+}
+
+@media only screen and (max-width: 832px){
+    .sidebarOpen .creatorGrid.raceButtonColumns{
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media only screen and (max-width: 817px){
+    .creatorGrid.columns.sidebarClosed {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+    .sidebarClosed .formSection {
+        order: 2;
+    }
+    .sidebarClosed .cardSection {
+        position: relative;
+        top: 0px;
+        order: 1;
+    }
+}
+
+@media only screen and (max-width: 702px){
+    .sidebarOpen .creatorGrid.raceButtonColumns{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+
+
+.btnRoll {
+    font-size: 1.25rem;
+    /* width: 50px; */
+    margin-right: 50px;
+}
+
+.abilities{
+
+}
+
+.abilities .paddingWrapper{
+    padding: 0 1rem 1rem 1rem;
+}
+
+.abilities .paddingWrapper:first-child{
+    padding: 1rem;
+}
+
+.abilities .paddingWrapper.disabled{
+    color: #727272;
+}
+
+
+.abilities .abilitiesRow {
+    display: grid;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    gap: 1rem;
+    font-size: 1.25rem;
+}
+
+.abilities .abilitiesRow .descriptor {
+    grid-column: span 4 / span 4;
+    margin-top: auto;
+    margin-bottom: auto;
+    display: flex;
+}
+.abilities .abilitiesRow .descriptor.fullSpan {
+    grid-column: span 8 / span 8;
+}
+
+.abilities .abilitiesRow .btnCounterDown {
+    font-size: 1.25rem;
+}
+
+.abilities .abilitiesRow .count {
+    margin: auto;
+}
+
+.abilities .abilitiesRow .btnCounterUp {
+    font-size: 1.25rem;
+}
+
+@media only screen and (max-width: 1349px){
+    .sidebarOpen .btnRoll {
+        margin-right: 0px;
+    }
+    .sidebarOpen .abilities .abilitiesRow {
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+    }
+    .sidebarOpen .abilities .abilitiesRow .descriptor.fullSpan {
+        grid-column: span 7 / span 7;
+    }
+}
+@media only screen and (max-width: 1199px){
+    .sidebarClosed .btnRoll {
+        margin-right: 0px;
+    }
+    .sidebarClosed .abilities .abilitiesRow {
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+    }
+    .sidebarClosed .abilities .abilitiesRow .descriptor.fullSpan {
+        grid-column: span 7 / span 7;
+    }
+}
+@media only screen and (max-width: 1119px){
+    .sidebarOpen .abilities .paddingWrapper,
+    .sidebarOpen .abilities .paddingWrapper:first-child {
+        padding-bottom: 2rem;
+    }
+    .sidebarOpen .abilities .abilitiesRow {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .sidebarOpen .abilities .abilitiesRow .descriptor,
+    .sidebarOpen .abilities .abilitiesRow .descriptor.fullSpan {
+        grid-column: span 3 / span 3;
+    }
+}
+@media only screen and (max-width: 1028px){
+    .sidebarOpen .abilities .paddingWrapper,
+    .sidebarOpen .abilities .paddingWrapper:first-child{
+        padding-bottom: 1rem;
+    }
+    .sidebarOpen .abilities .abilitiesRow {
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+    }
+    .sidebarOpen .abilities .abilitiesRow .descriptor {
+        grid-column: span 4 / span 4;
+    }
+    .sidebarOpen .abilities .abilitiesRow .descriptor.fullSpan {
+        grid-column: span 7 / span 7;
+    }
+}
+@media only screen and (max-width: 991px){
+    .sidebarClosed .abilities .paddingWrapper,
+    .sidebarClosed .abilities .paddingWrapper:first-child{
+        padding-bottom: 2rem;
+    }
+    .sidebarClosed .abilities .abilitiesRow {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .sidebarClosed .abilities .abilitiesRow .descriptor,
+    .sidebarClosed .abilities .abilitiesRow .descriptor.fullSpan {
+        grid-column: span 3 / span 3;
+    }
+}
+@media only screen and (max-width: 817px){
+    .sidebarClosed .abilities .paddingWrapper,
+    .sidebarClosed .abilities .paddingWrapper:first-child{
+        padding-bottom: 1rem;
+    }
+    .sidebarClosed .abilities .abilitiesRow {
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+    }
+    .sidebarClosed .abilities .abilitiesRow .descriptor {
+        grid-column: span 4 / span 4;
+    }
+    .sidebarClosed .abilities .abilitiesRow .descriptor.fullSpan {
+        grid-column: span 7 / span 7;
+    }
+}
+@media only screen and (max-width: 759px){
+    .sidebarOpen .abilities .paddingWrapper,
+    .sidebarOpen .abilities .paddingWrapper:first-child{
+        padding-bottom: 2rem;
+    }
+    .sidebarOpen .abilities .abilitiesRow {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .sidebarOpen .abilities .abilitiesRow .descriptor,
+    .sidebarOpen .abilities .abilitiesRow .descriptor.fullSpan  {
+        grid-column: span 3 / span 3;
+    }
+}
+@media only screen and (max-width: 680px){
+    .sidebarOpen .abilities .paddingWrapper,
+    .sidebarOpen .abilities .paddingWrapper:first-child{
+        padding-bottom: 1rem;
+    }
+    .sidebarOpen .abilities .abilitiesRow {
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+    }
+    .sidebarOpen .abilities .abilitiesRow .descriptor {
+        grid-column: span 4 / span 4;
+    }
+    .sidebarOpen .abilities .abilitiesRow .descriptor.fullSpan {
+        grid-column: span 7 / span 7;
+    }
+}
+@media only screen and (max-width: 469px){
+    .sidebarOpen .abilities .paddingWrapper,
+    .sidebarClosed .abilities .paddingWrapper,
+    .sidebarOpen .abilities .paddingWrapper:first-child,
+    .sidebarClosed .abilities .paddingWrapper:first-child{
+        padding-bottom: 2rem;
+    }
+    .sidebarOpen .abilities .abilitiesRow,
+    .sidebarClosed .abilities .abilitiesRow {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .sidebarOpen .abilities .abilitiesRow .descriptor,
+    .sidebarClosed .abilities .abilitiesRow .descriptor 
+    .sidebarOpen .abilities .abilitiesRow .descriptor.fullSpan,
+    .sidebarClosed .abilities .abilitiesRow .descriptor.fullSpan {
+        grid-column: span 3 / span 3;
+    }
+}
+
+
+
+.tabButton {
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-right: 5px;    
+}
+
+.tabButton a{ 
+    text-decoration: none !important;;
+}
+
+.tabButtonLink {
+    text-decoration: none !important;
+    font-weight: bold;
+    font-size: large;
+    text-align: 'center' !important;
+    border-top: solid 2px #ff0000 !important;
+    border-left: solid 2px #ff0000 !important;
+    border-right: solid 2px #ff0000 !important;
+    color: #ffffff;
+}
+
+.tabButtonLinkActive {
+    border-bottom: solid 2px #212529 !important;
+}
+
+.tabTitle{
+    display: none;
+}
+
+@media only screen and (max-width: 1111px){
+    .sidebarOpen .tabButton a .icon{
+        font-size: 1.5rem;
+    }
+    .sidebarOpen .tabButton a .display{
+        display: none;
+    }
+    .sidebarOpen .tabTitle{
+        display: unset;
+    }
+}
+
+@media only screen and (max-width: 1028px){
+    .sidebarOpen .tabButton a .icon{
+        font-size: unset;
+    }
+    .sidebarOpen .tabButton a .display{
+        display: unset;
+    }
+    .sidebarOpen .tabTitle{
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 991px){
+    .sidebarClosed .tabButton a .icon{
+        font-size: 1.5rem;
+    }
+    .sidebarClosed .tabButton a .display{
+        display: none;
+    }
+    .sidebarClosed .tabTitle{
+        display: unset;
+    }
+}
+
+@media only screen and (max-width: 817px){
+    .sidebarClosed .tabButton a .icon{
+        font-size: unset;
+    }
+    .sidebarClosed .tabButton a .display{
+        display: unset;
+    }
+    .sidebarClosed .tabTitle{
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 747px){
+    .sidebarOpen .tabButton a .icon{
+        font-size: 1.5rem;
+    }
+    .sidebarOpen .tabButton a .display{
+        display: none;
+    }
+    .sidebarOpen .tabTitle{
+        display: unset;
+    }
+}
+
+@media only screen and (max-width: 680px){
+    .sidebarOpen .tabButton a .icon{
+        font-size: unset;
+    }
+    .sidebarOpen .tabButton a .display{
+        display: unset;
+    }
+    .sidebarOpen .tabTitle{
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 459px){
+    .sidebarOpen .tabButton a .icon,
+    .sidebarClosed .tabButton a .icon{
+        font-size: 1.5rem;
+    }
+    .sidebarOpen .tabButton a .display,
+    .sidebarClosed .tabButton a .display{
+        display: none;
+    }
+    .sidebarOpen .tabTitle,
+    .sidebarClosed .tabTitle{
+        display: unset;
+    }
+}
+
+
+.sticky{
+    --_stickyTop: var(--stickyTop, 0px);
+    --_stickyBackgroundColor: var(--stickyBackgroundColor, #212529);
+    --_stickyZIndex: var(--stickyZIndex, unset);
+
+    position: sticky;
+    top: var(--_stickyTop);
+    background-color: var(--_stickyBackgroundColor);
+    z-index: var(--_stickyZIndex);
+}
+
+.sticky.stickyHeader{
+    --stickyZIndex: 2;
+}
+
+.sticky.stickyLevel{
+    --stickyTop: 51px;
+    --stickyZIndex: 1;
+
+    font-size: 1.25rem;
+    border-bottom: 1px solid #595959;
+}
+.sticky.stickyLevel .row{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+
+
+.classTable{
+    --_fontSize: var(--fontSize, 1rem);
+
+    font-size: var(--_fontSize);
+}
+@media only screen and (max-width: 991px){
+    .classTable{
+        font-size: 1rem;
+    }
+}
+
+.classTable.barbarian,
+.classTable.cleric,
+.classTable.druid{
+    --fontSize: 0.7rem;
+}
+.classTable.artificer,
+.classTable.wizard{
+    --fontSize: 0.6rem;
+}
+.classTable.bard,
+.classTable.sorcerer,
+.classTable.warlock{
+    --fontSize: 0.5rem;
+}
